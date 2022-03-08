@@ -1,0 +1,9 @@
+hmm_name	threshold	score_type	definition
+D00009	200	full	FLR; Flavone/flavonol reductase 
+D00003	380	full	CHI; Chalcone isomerase
+D00001	550	full	FCR; Flavanone/flavanonol-cleaving reductase
+D00006	242	full	PHY; Phloretin hydrolase [EC:3.7.1.4]
+D00002	450	full	DZR;daidzein reductase
+D00005	300	full	DDR;dihydrodaidzein reductase
+D00004	300	full	TDR;tetrahydrodaidzein reductase
+D00007	582	full	LSD;Iignostilbene-α,β-dioxygenase
