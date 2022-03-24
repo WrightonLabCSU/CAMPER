@@ -1,4 +1,4 @@
-blast_name	 A_rank	 B_rank	score_type	 definition	ID for distillate
+blast_name	A_rank	B_rank	score_type	definition	ID_for_distillate
 D00008;SesA	200	120	full	SesA; THF-dependent sesamin/sesamin-monocatechol methylenetransferase	D00008
 D00010;Ber	200	120	full	BER; benzyl ether reductase	D00010
 D00011;Glm	200	120	full	GLM; guaiacol lignan methyltransferase	D00011
