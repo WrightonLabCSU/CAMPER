@@ -5,19 +5,8 @@ import pandas as pd
 import networkx as nx
 import altair as alt
 
-from mag_annotator.summarize_genomes import fill_genome_summary_frame, summarize_rrnas, \
-    summarize_trnas, build_module_net, get_module_step_coverage, make_module_coverage_df, make_module_coverage_frame, \
-    make_module_coverage_heatmap, pairwise, first_open_paren_is_all, split_into_steps, is_ko, make_module_network, \
-    get_module_coverage, make_etc_coverage_df, make_etc_coverage_heatmap, make_functional_df, make_functional_heatmap, \
-    fill_liquor_dfs, make_liquor_heatmap, make_liquor_df, make_genome_summary, write_summarized_genomes_to_xlsx,\
-    get_phylum_and_most_specific
-from mag_annotator.utils import get_ordered_uniques
+from camper_dramkit.camper_distill import fill_genome_summary_frame, summarize_rrnas, summarize_trnas, build_module_net, get_module_step_coverage, make_module_coverage_df, make_module_coverage_frame, make_module_coverage_heatmap, pairwise, first_open_paren_is_all, split_into_steps, is_ko, make_module_network, get_module_coverage, make_etc_coverage_df, make_etc_coverage_heatmap, make_functional_df, make_functional_heatmap, fill_liquor_dfs, make_liquor_heatmap, make_liquor_df, make_genome_summary, write_summarized_genomes_to_xlsx, get_phylum_and_most_specific
 
-
-def test_get_ordered_uniques():
-    assert get_ordered_uniques([1, 2, 3]) == [1, 2, 3]
-    assert get_ordered_uniques([1, 1, 2, 3]) == [1, 2, 3]
-    assert get_ordered_uniques([1, 2, 1, 3]) == [1, 2, 3]
 
 
 @pytest.fixture()
@@ -64,17 +53,6 @@ def test_summarize_rrnas():
 def fake_processed_trnas():
     return pd.read_csv(os.path.join('tests', 'data', 'fake_trnas.tsv'), sep='\t')
 
-
-def test_summarize_trnas(fake_processed_trnas):
-    test_summarized_trnas = summarize_trnas(fake_processed_trnas)
-    summarized_trnas = pd.DataFrame([['Gly (GCC)', 'Gly tRNA with GCC Codon', 'Gly tRNA', 'tRNA', 'tRNA', '', 1., 0.],
-                                     ['Gly (TCC)', 'Gly tRNA with TCC Codon', 'Gly tRNA', 'tRNA', 'tRNA', '', 0., 1.],
-                                     ['Leu (TAA)', 'Leu tRNA with TAA Codon', 'Leu tRNA', 'tRNA', 'tRNA', '', 1., 0.],
-                                     ['Tyr, pseudo (GTA)', 'Tyr pseudo tRNA with GTA Codon', 'Tyr tRNA', 'tRNA', 'tRNA',
-                                      '', 0, 1]],
-                                    columns=['gene_id', 'gene_description', 'module', 'sheet', 'header', 'subheader',
-                                             'Cytophaga_hutchinsonii_ATCC_33406', 'other_organismii'])
-    pd.testing.assert_frame_equal(test_summarized_trnas, summarized_trnas)
 
 
 def test_make_genome_summary(annotations, genome_summary_frame, summarized_genomes):

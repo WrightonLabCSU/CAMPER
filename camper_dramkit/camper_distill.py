@@ -1,13 +1,16 @@
+"""A trimed down distillation scripts for use with CAMPERS"""
+import os
+from os import path, mkdir
+import click
 import pandas as pd
 from collections import Counter, defaultdict
-from os import path, mkdir
 import altair as alt
 import networkx as nx
 from itertools import tee
 import re
 import numpy as np
 from datetime import datetime
-import click
+from camper_dramkit.camper_annotate import CAMPER_NAME
 
 
 # TODO: add RBH information to output
@@ -24,6 +27,8 @@ KO_REGEX = r'^K\d\d\d\d\d$'
 ETC_COVERAGE_COLUMNS = ['module_id', 'module_name', 'complex', 'genome', 'path_length', 'path_length_coverage',
                         'percent_coverage', 'genes', 'missing_genes', 'complex_module_name']
 TAXONOMY_LEVELS = ['d', 'p', 'c', 'o', 'f', 'g', 's']
+
+DEFAULT_CAMPER_DIST = os.path.join(os.path.dirname(__file__),  "..", "CAMPERdb", "CAMPER_distillate.tsv")
 
 
 # UTILS
@@ -55,8 +60,8 @@ def get_ids_from_row(row):
         id_list += [j[1:-1].split('.')[0]
                     for j in re.findall(r'\[PF\d\d\d\d\d.\d*\]', row['pfam_hits'])]
     # custom campers id
-    if 'CAMPER_id' in row:
-        id_list += [row['CAMPER_id']]
+    if f"{CAMPER_NAME}_id" in row:
+        id_list += [row[f"{CAMPER_NAME}_id"]]
     return set(id_list)
 
 
@@ -86,8 +91,8 @@ def get_ids_from_annotation(frame):
     if 'pfam_hits' in frame:
         id_list += [j[1:-1].split('.')[0] for i in frame.pfam_hits.dropna()
                     for j in re.findall(r'\[PF\d\d\d\d\d.\d*\]', i)]
-    if 'CAMPER_id' in frame:
-        id_list += frame['CAMPER_id'].dropna().apply(lambda x: x.strip()).tolist()
+    if f"{CAMPER_NAME}_id" in frame:
+        id_list += frame[f"{CAMPER_NAME}_id"].dropna().apply(lambda x: x.strip()).tolist()
     return Counter(id_list)
 
 
@@ -126,65 +131,10 @@ def fill_genome_summary_frame_gene_names(annotations, genome_summary_frame, grou
     return genome_summary_frame
 
 
-def summarize_rrnas(rrnas_df, groupby_column='fasta'):
-    genome_rrna_dict = dict()
-    for genome, frame in rrnas_df.groupby(groupby_column):
-        genome_rrna_dict[genome] = Counter(frame['type'])
-    row_list = list()
-    for rna_type in RRNA_TYPES:
-        row = [rna_type, '%s ribosomal RNA gene' % rna_type.split()[0], 'rRNA', 'rRNA', '', '']
-        for genome, rrna_dict in genome_rrna_dict.items():
-            row.append(genome_rrna_dict[genome].get(rna_type, 0))
-        row_list.append(row)
-    rrna_frame = pd.DataFrame(row_list, columns=FRAME_COLUMNS + list(genome_rrna_dict.keys()))
-    return rrna_frame
-
-
-def summarize_trnas(trnas_df, groupby_column='fasta'):
-    # first build the frame
-    combos = {(line.Type, line.Codon, line.Note) for _, line in trnas_df.iterrows()}
-    frame_rows = list()
-    for combo in combos:
-        if combo[2] == 'pseudo':
-            gene_id = '%s, pseudo (%s)'
-            gene_description = '%s pseudo tRNA with %s Codon'
-        else:
-            gene_id = '%s (%s)'
-            gene_description = '%s tRNA with %s Codon'
-        gene_id = gene_id % (combo[0], combo[1])
-        gene_description = gene_description % (combo[0], combo[1])
-        module_description = '%s tRNA' % combo[0]
-        frame_rows.append([gene_id, gene_description, module_description, 'tRNA', 'tRNA', ''])
-    trna_frame = pd.DataFrame(frame_rows, columns=FRAME_COLUMNS)
-    trna_frame = trna_frame.sort_values('gene_id')
-    # then fill it in
-    trna_frame = trna_frame.set_index('gene_id')
-    for group, frame in trnas_df.groupby(groupby_column):
-        gene_ids = list()
-        for index, line in frame.iterrows():
-            if line.Note == 'pseudo':
-                gene_id = '%s, pseudo (%s)'
-            else:
-                gene_id = '%s (%s)'
-            gene_ids.append(gene_id % (line.Type, line.Codon))
-        trna_frame[group] = pd.Series(Counter(gene_ids))
-    trna_frame = trna_frame.reset_index()
-    trna_frame = trna_frame.fillna(0)
-    return trna_frame
-
-
-def make_genome_summary(annotations, genome_summary_frame, trna_frame=None, rrna_frame=None, groupby_column='fasta'):
+def make_genome_summary(annotations, genome_summary_frame, groupby_column='fasta'):
     summary_frames = list()
     # get ko summaries
     summary_frames.append(fill_genome_summary_frame(annotations, genome_summary_frame.copy(), groupby_column))
-
-    # add rRNAs
-    if rrna_frame is not None:
-        summary_frames.append(summarize_rrnas(rrna_frame, groupby_column))
-
-    # add tRNAs
-    if trna_frame is not None:
-        summary_frames.append(summarize_trnas(trna_frame, groupby_column))
 
     # merge summary frames
     summarized_genomes = pd.concat(summary_frames, sort=False)
@@ -618,19 +568,13 @@ def make_strings_no_repeats(genome_taxa_dict):
 @click.command()
 @click.option('-a', '--annotations', help="annotations file, from dram annotate", 
               required=True)
-@click.option('-o', '--output_tsv', help="output tsv loctation, it can overwright!", required=False)
-@click.option('--groupby_column', default='fasta', type=str,
+@click.option('-o', '--output_tsv', help="output tsv loctation, it can overwright!", required=True)
+@click.option('--groupby_column', type=str, default='fasta',
               help="past_annotations to append new annotations to.")
-@click.option('--custom_distillate', 
-              help="past_annotations to append new annotations to.")
-@click.option('--distillate_gene_names', default=False, 
-              help="past_annotations to append new annotations to.")
-@click.option('--genomes_per_product', default=1000, type=int, 
-              help="past_annotations to append new annotations to.")
-# def summarize_genomes(annotations, trna_path=None, rrna_path=None, output_tsv='.', groupby_column='fasta',
-#                       custom_distillate=None, distillate_gene_names=False, genomes_per_product=1000):
+@click.option('--camper_distillate', default=DEFAULT_CAMPER_DIST,
+              help="CAMPER Distillate file, if not specified the default will be used")
 def summarize_genomes(annotations,  output_tsv, groupby_column='fasta',
-                      custom_distillate=None, distillate_gene_names=False, genomes_per_product=1000):
+                      camper_distillate=DEFAULT_CAMPER_DIST):
     start_time = datetime.now()
 
     # read in data
@@ -638,9 +582,8 @@ def summarize_genomes(annotations,  output_tsv, groupby_column='fasta',
     if 'bin_taxnomy' in annotations:
         annotations = annotations.sort_values('bin_taxonomy')
 
-    genome_summary_form = pd.read_csv(custom_distillate, sep='\t')
-    summarized_genomes = make_genome_summary(annotations, genome_summary_form, None, None, groupby_column)
-    print(summarized_genomes[summarized_genomes['gene_id'] == 'D00001'])
+    genome_summary_form = pd.read_csv(camper_distillate, sep='\t')
+    summarized_genomes = make_genome_summary(annotations, genome_summary_form, groupby_column)
     summarized_genomes.drop(['sheet'], axis=1, inplace=True)
     summarized_genomes.to_csv(output_tsv, sep='\t', index=False)
 

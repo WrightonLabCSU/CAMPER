@@ -1,5 +1,0 @@
-[console_scripts]
-camper_annotate = camperkit.camper_annotate:annotate_genes
-camper_distill = camperkit.camper_distill:summarize_genomes
-combine_annotations_lowmem = camperkit.combine_annotations_lowmem:append_annotations_lowmem
-

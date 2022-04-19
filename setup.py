@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from camperkit import __version__ as version
+from camper_dramkit import __version__ as version
 from os import path
 
 __author__ = 'rmflynn'
@@ -11,20 +11,20 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name="CAMPER_DRAMKit",
+    name="camper_dramkit",
     version=__version__,
     description="A tool to use the CAMPER dataset",
     long_description=long_description,
     long_description_content_type='text/markdown',  # Optional (see note above)
-    packages=['camperkit'],
-    package_data={'camperdb': ['../CAMPERdb/*']},
+    packages=['camper_dramkit'],
+    package_data={'CAMPERdb': ['CAMPERdb/*']},
     python_requires='>=3.8',
     install_requires=['scikit-bio', 'pandas', 'altair', 'sqlalchemy', 'networkx', 'openpyxl', 'numpy', 'click'],
     entry_points={
         'console_scripts': [
-            'camper_distill = camperkit.camper_distill:summarize_genomes',
-            'camper_annotate = camperkit.camper_annotate:annotate_genes',
-            'combine_annotations_lowmem = camperkit.combine_annotations_lowmem:append_annotations_lowmem'
+            'camper_distill = camper_dramkit.camper_distill:summarize_genomes',
+            'camper_annotate = camper_dramkit.camper_annotate:annotate_genes',
+            'combine_annotations_lowmem = camper_dramkit.combine_annotations_lowmem:append_annotations_lowmem'
         ],
     },
     author="Rory Flynn",

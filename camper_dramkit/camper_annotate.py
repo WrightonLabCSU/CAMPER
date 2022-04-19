@@ -1,4 +1,4 @@
-"""A cut down of dram annotator"""
+"""A cut down of dram annotator that only adds CAMPER Annotations"""
 import re
 import os
 import warnings
@@ -17,11 +17,10 @@ import click
 # Remove
 
 CAMPER_NAME = "CAMPER"
-DEFAULT_CUSTOM_FA_DB_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPER", "data", "CAMPER_blast.faa") 
-print(DEFAULT_CUSTOM_FA_DB_LOC)
-DEFAULT_CUSTOM_HMM_LOC = "./CAMPER/data/CAMPER.hmm"
-DEFAULT_CUSTOM_HMM_CUTOFFS_LOC = "./CAMPER/data/CAMPER_hmm_scores.tsv"
-DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC = "CAMPER/data/CAMPER_blast_scores.tsv"
+DEFAULT_CUSTOM_FA_DB_LOC = os.path.join(os.path.dirname(__file__),  "..", "CAMPERdb", "CAMPER_blast.faa")
+DEFAULT_CUSTOM_HMM_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPERdb", "CAMPER.hmm")
+DEFAULT_CUSTOM_HMM_CUTOFFS_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPERdb", "CAMPER_hmm_scores.tsv")
+DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPERdb", "CAMPER_blast_scores.tsv")
 
 MAG_DBS_TO_ANNOTATE = ('kegg', 'kofam', 'kofam_ko_list', 'uniref', 
                        'peptidase', 'pfam', 'dbcan', 'vogdb')
@@ -330,27 +329,6 @@ def get_unannotated(fasta_loc, annotations):
             if seq.metadata['id'] not in annotations]
 
 
-def assign_grades(annotations):
-    """Grade genes based on reverse best hits to KEGG, UniRef and Pfam"""
-    grades = dict()
-    for gene, row in annotations.iterrows():
-        if row.get('kegg_RBH') is True:
-            rank = 'A'
-        elif row.get('uniref_RBH') is True:
-            rank = 'B'
-        elif not pd.isna(row.get('kegg_hit')) or not pd.isna(row.get('uniref_hit')):
-            rank = 'C'
-        elif not pd.isna(row.get('pfam_hits')) or not pd.isna(row.get('cazy_hits'))\
-                or not pd.isna(row.get('peptidase_hit')):
-            rank = 'D'
-        else:
-            rank = 'E'
-        grades[gene] = rank
-    return pd.DataFrame(grades, index=['rank']).T
-
-
-
-
 def get_minimum_bitscore(info_db):
     bit_score_threshold = min(info_db[['A_rank', 'B_rank']].min().values)
     return bit_score_threshold
@@ -503,7 +481,7 @@ def process_custom_fa_db_cutoffs(custom_fa_db_cutoffs_loc, custom_name, verbose=
     return {custom_name[i]:j for i, j in enumerate(custom_fa_db_cutoffs_loc)}
 
 
-def annotate_orf(gene_faa:str, curated_databases:list, tmp_dir:str, start_time, 
+def annotate_orf(gene_faa:str, tmp_dir:str, start_time, 
                  custom_locs=(), 
                  custom_hmm_cutoffs_locs=(), 
                  custom_fa_db_cutoffs_locs=(), 
@@ -573,7 +551,7 @@ def merge_in_new_annotations(new_annotations:pd.DataFrame, past_annotations:pd.D
                       " The falowing columns will be replaced in the new"
                       " annotations file:\n%s" %
                       past_cols.intersection(new_cols))
-    past_annotations = past_annotations[past_cols - new_cols]
+    past_annotations = past_annotations[list(past_cols - new_cols)]
     while set(new_annotations.index) != set(past_annotations.index):
         if np.all([new_annotations.index.str.startswith('genes_')]): 
             new_annotations.index = new_annotations.index.str[6:]
@@ -596,13 +574,13 @@ def merge_in_new_annotations(new_annotations:pd.DataFrame, past_annotations:pd.D
 @click.option('--kofam_use_dbcan2_thresholds', default=False,
          help='Use dbcan2 suggested HMM cutoffs for KOfam annotation instead of KOfam '
               'recommended cutoffs. This will be ignored if annotating with KEGG Genes.')
-@click.option('--camper_fa_db_loc', multiple=True,
+@click.option('--camper_fa_db_loc', default=[DEFAULT_CUSTOM_FA_DB_LOC], multiple=True,
          help="Location of CAMPER fastas to annotate against")
-@click.option('--camper_fa_db_cutoffs_loc', multiple=True,
+@click.option('--camper_fa_db_cutoffs_loc', default=[DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC], multiple=True,
               help="Location of file with camper fasta cutoffs and descriptions")
-@click.option('--camper_hmm_loc',  multiple=True,
+@click.option('--camper_hmm_loc',   default=[DEFAULT_CUSTOM_HMM_LOC], multiple=True,
               help="Location of camper hmms to annotate against")
-@click.option('--camper_hmm_cutoffs_loc', multiple=True,
+@click.option('--camper_hmm_cutoffs_loc', default=[DEFAULT_CUSTOM_HMM_CUTOFFS_LOC], multiple=True,
               help="Location of file with CAMPER HMM cutoffs and descriptions")
 # @click.option('--use_uniref', default=False,
 #               help='Annotate these fastas against UniRef, drastically increases run time and '
@@ -616,7 +594,7 @@ def merge_in_new_annotations(new_annotations:pd.DataFrame, past_annotations:pd.D
 @click.option('--threads', type=int, default=10, help='number of processors to use')
 def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_score_threshold=350,
                    past_annotations_path:str=None, 
-                   cazy_fa_db_loc=(DEFAULT_CUSTOM_FA_DB_LOC), 
+                   camper_fa_db_loc=(DEFAULT_CUSTOM_FA_DB_LOC), 
                    camper_fa_db_cutoffs_loc=(DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC,), 
                    camper_hmm_loc=(DEFAULT_CUSTOM_HMM_LOC),
                    camper_hmm_cutoffs_loc=(DEFAULT_CUSTOM_HMM_CUTOFFS_LOC), 
@@ -636,7 +614,7 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
     start_time = datetime.now()
     print('%s: Annotation started' % str(datetime.now()))
 
-    if len(cazy_fa_db_loc + camper_hmm_loc) < 1:
+    if len(camper_fa_db_loc + camper_hmm_loc) < 1:
         raise ValueError("For some reason there are no database selected to"
                          " annotate against. This is most likely a result of"
                          " bad arguments.")
@@ -649,11 +627,11 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
     camper_locs = process_camper(output_dir=path.join(tmp_dir, 'custom_dbs'), 
                                        custom_fa_db_loc=camper_fa_db_loc,
                                        custom_hmm_loc=camper_hmm_loc,
-                                       custom_name=CAMPER_NAME,  
+                                       custom_name=[CAMPER_NAME],  
                                        threads=threads,
                                        verbose=verbose)
-    camper_fa_db_cutoffs_locs = process_custom_fa_db_cutoffs(camper_fa_db_cutoffs_loc, CAMPER_NAME)
-    camper_hmm_cutoffs_locs = process_custom_hmm_cutoffs(camper_hmm_cutoffs_loc, CAMPER_NAME)
+    camper_fa_db_cutoffs_locs = process_custom_fa_db_cutoffs(camper_fa_db_cutoffs_loc, [CAMPER_NAME])
+    camper_hmm_cutoffs_locs = process_custom_hmm_cutoffs(camper_hmm_cutoffs_loc, [CAMPER_NAME])
     print('%s: Retrieved database locations and descriptions' % (str(datetime.now() - start_time)))
 
     # annotate
@@ -669,7 +647,7 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
         # annotate
         annotations = pd.concat([
             orf for orf in
-            annotate_orf(fasta_loc, curated_databases, fasta_dir,
+            annotate_orf(fasta_loc, fasta_dir,
                          start_time, camper_locs,
                          camper_hmm_cutoffs_locs, camper_fa_db_cutoffs_locs, 
                          bit_score_threshold, rbh_bit_score_threshold, 
@@ -711,21 +689,6 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
 if __name__ == "__main__":
     annotate_genes()
 
-
-
-"""
-# a) CAMPER_blast.faa [these are the blast-based searches]
-# b) CAMPER.hmm [these are hmm profiles]
-# c) CAMPER_hmm_scores.txt [these are the hmms and scores-- i made a column for A-rank and column for B-rank. note, sometimes there is only an A rank]
-# d) test_CAMPER_distillate.tsv [this is all the CAMPER ids + a few KO/CAZY id to test distilling]
-# these files are also on the server: /home/projects-wrighton/EMERGE/CAMPER/final_profiles
-# let me know how you want the blast-based search form (to give a-rank and b-rank scores)? and do we currently set an alignment length limit for blast searches in dram?
-# i would like to run the annotations against all EMERGE mag genes - but i will wait all mags finish annotating. in the mean time, you can use the mags annotated here:
-# /home/projects-wrighton-2/EMERGE_DRAM/97_clusters
-
-os.system("rm -rf ./output/t2")
-os.system( "python CAMPER/camper_dram/camper_annotate.py  -a /home/projects-wrighton-2/EMERGE_DRAM/97_clusters/20100900_E1D_13_annotated/annotations.tsv -i /home/projects-wrighton-2/EMERGE_DRAM/97_clusters/20100900_E1D_13_annotated/genes.faa  --custom_fa_db_loc ./CAMPER/data/CAMPER_blast.faa  --custom_hmm_loc ./CAMPER/data/CAMPER.hmm --custom_hmm_cutoffs_loc ./CAMPER/data/CAMPER_hmm_scores.tsv --custom_fa_db_cutoffs_loc CAMPER/data/CAMPER_blast_scores.tsv --custom_name CAMPER -o ./output/t2")
-"""
 
 
 

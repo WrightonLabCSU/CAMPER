@@ -12,10 +12,10 @@ from shutil import copy
 import pandas as pd
 from skbio.io import read as read_sequence
 
-from camper_annotate import filter_fasta, run_prodigal, get_best_hits, \
+from camper_dramkit.camper_annotate import filter_fasta, run_prodigal, get_best_hits, \
     get_reciprocal_best_hits, process_reciprocal_best_hits, get_kegg_description, get_uniref_description, \
-    get_basic_description, get_peptidase_description, get_sig_row, get_gene_data, get_unannotated, assign_grades, \
-count_motifs, strip_endings, process_custom, \
+    get_basic_description, get_peptidase_description, get_sig_row, get_gene_data, get_unannotated, \
+    count_motifs, strip_endings, process_custom, \
     parse_hmmsearch_domtblout, \
     camper_hmmscan_formater, make_mmseqs_db, camper_blast_search_formater
 
