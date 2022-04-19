@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
-from mag_annotator import __version__ as version
+from camperkit import __version__ as version
 from os import path
 
-__author__ = 'shafferm'
+__author__ = 'rmflynn'
 __version__ = version
 
 here = path.abspath(path.dirname(__file__))
@@ -14,22 +14,22 @@ setup(
     name="DRAM-bio",
     version=__version__,
     # scripts=['scripts/DRAM.py', 'scripts/DRAM-v.py', 'scripts/DRAM-setup.py'],
-    packages=find_packages(),
     description="A tool to use the CAMPER dataset",
     long_description=long_description,
     long_description_content_type='text/markdown',  # Optional (see note above)
-    package_data={'mag_annotator': ['CONFIG']},
+    packages=['camperkit'],
+    package_data={'camperkit': ['../CAMPERdb/*']},
     python_requires='>=3.8',
     install_requires=['scikit-bio', 'pandas', 'altair', 'sqlalchemy', 'networkx', 'openpyxl', 'numpy', 'click'],
     entry_points={
         'console_scripts': [
-            'camper_distill = camper_distill:summarize_genomes',
-            'camper_annotate = camper_annotate:annotate_genes',
-            'combine_annotations_lowmem = combine_annotations_lowmem:append_annotations_lowmem',
+            'camper_distill = camperkit.camper_distill:summarize_genomes',
+            'camper_annotate = camperkit.camper_annotate:annotate_genes',
+            'combine_annotations_lowmem = camperkit.combine_annotations_lowmem:append_annotations_lowmem'
         ],
     },
-    author="Michael Shaffer",
-    author_email='michael.t.shaffer@colostate.edu',
-    url="https://github.com/shafferm/DRAM/",
-    download_url="https://github.com/shafferm/DRAM/tarball/%s" % __version__
+    author="Rory Flynn",
+    author_email='rory.flynn@colostate.edu',
+    url="https://github.com/WrightonLabCSU/CAMPER",
+    download_url="https://github.com/WrightonLabCSU/CAMPER/tarball/%s" % __version__
 )

@@ -639,9 +639,6 @@ def summarize_genomes(annotations,  output_tsv, groupby_column='fasta',
         annotations = annotations.sort_values('bin_taxonomy')
 
     genome_summary_form = pd.read_csv(custom_distillate, sep='\t')
-    # if distillate_gene_names:
-    # summarized_genomes = fill_genome_summary_frame_gene_names(annotations, genome_summary_form, groupby_column)
-    # else:
     summarized_genomes = make_genome_summary(annotations, genome_summary_form, None, None, groupby_column)
     print(summarized_genomes[summarized_genomes['gene_id'] == 'D00001'])
     summarized_genomes.drop(['sheet'], axis=1, inplace=True)
