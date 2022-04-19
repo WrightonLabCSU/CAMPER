@@ -1,5 +1,6 @@
 """A cut down of dram annotator"""
 import re
+import os
 import warnings
 import subprocess
 from glob import glob
@@ -15,6 +16,12 @@ import numpy as np
 import click
 # Remove
 
+CAMPER_NAME = "CAMPER"
+DEFAULT_CUSTOM_FA_DB_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPER", "data", "CAMPER_blast.faa") 
+print(DEFAULT_CUSTOM_FA_DB_LOC)
+DEFAULT_CUSTOM_HMM_LOC = "./CAMPER/data/CAMPER.hmm"
+DEFAULT_CUSTOM_HMM_CUTOFFS_LOC = "./CAMPER/data/CAMPER_hmm_scores.tsv"
+DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC = "CAMPER/data/CAMPER_blast_scores.tsv"
 
 MAG_DBS_TO_ANNOTATE = ('kegg', 'kofam', 'kofam_ko_list', 'uniref', 
                        'peptidase', 'pfam', 'dbcan', 'vogdb')
@@ -455,7 +462,7 @@ def strip_endings(text, suffixes: list):
     return text
 
 
-def process_custom(output_dir, custom_fa_db_loc=(), custom_hmm_loc=(), 
+def process_camper(output_dir, custom_fa_db_loc=(), custom_hmm_loc=(), 
                        custom_name=(), threads=1, verbose=False):
     mkdir(output_dir)
     if (len(custom_fa_db_loc) != len(custom_name)) or (len(custom_hmm_loc) != len(custom_name)):
@@ -589,28 +596,17 @@ def merge_in_new_annotations(new_annotations:pd.DataFrame, past_annotations:pd.D
 @click.option('--kofam_use_dbcan2_thresholds', default=False,
          help='Use dbcan2 suggested HMM cutoffs for KOfam annotation instead of KOfam '
               'recommended cutoffs. This will be ignored if annotating with KEGG Genes.')
-@click.option('--custom_fa_db_loc', multiple=True,
-         help="Location of fastas to annotate against, can be used multiple times but"
-              "must match nubmer of custom_name's")
-@click.option('--custom_fa_db_cutoffs_loc', multiple=True,
-              help="Location of file with custom fasta cutoffs and descriptions, can be used "
-                   "multiple times.")
-@click.option('--custom_name',  multiple=True,
-         help="Names of custom hmm and faa databases, can be used multiple times.")
-@click.option('--custom_hmm_loc',  multiple=True,
-              help="Location of hmms to annotate against, can be used multiple times but"
-                   "must match nubmer of custom_name's")
-@click.option('--custom_hmm_cutoffs_loc', multiple=True,
-              help="Location of file with custom HMM cutoffs and descriptions, can be used "
-                   "multiple times.")
+@click.option('--camper_fa_db_loc', multiple=True,
+         help="Location of CAMPER fastas to annotate against")
+@click.option('--camper_fa_db_cutoffs_loc', multiple=True,
+              help="Location of file with camper fasta cutoffs and descriptions")
+@click.option('--camper_hmm_loc',  multiple=True,
+              help="Location of camper hmms to annotate against")
+@click.option('--camper_hmm_cutoffs_loc', multiple=True,
+              help="Location of file with CAMPER HMM cutoffs and descriptions")
 # @click.option('--use_uniref', default=False,
 #               help='Annotate these fastas against UniRef, drastically increases run time and '
 #                    'memory requirements')
-@click.option('--curated_databases', multiple=True,
-              type=click.Choice(['kegg', 'kofam', 'uniref', 'viral',
-                                 'peptidase', 'pfam', 'dbcan', 'vogdb'],
-                                case_sensitive=False),
-              )
 @click.option('--keep_tmp_dir', default=False)
 @click.option('--make_new_faa', default=None,
               help="If true the output directory will have a new genes.faa file with the"
@@ -619,9 +615,11 @@ def merge_in_new_annotations(new_annotations:pd.DataFrame, past_annotations:pd.D
               " based on other arguments.")
 @click.option('--threads', type=int, default=10, help='number of processors to use')
 def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_score_threshold=350,
-                   past_annotations_path:str=None, curated_databases=(),
-                   custom_name=(), custom_fa_db_loc=(), custom_fa_db_cutoffs_loc=(), 
-                   custom_hmm_loc=(), custom_hmm_cutoffs_loc=(), 
+                   past_annotations_path:str=None, 
+                   cazy_fa_db_loc=(DEFAULT_CUSTOM_FA_DB_LOC), 
+                   camper_fa_db_cutoffs_loc=(DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC,), 
+                   camper_hmm_loc=(DEFAULT_CUSTOM_HMM_LOC),
+                   camper_hmm_cutoffs_loc=(DEFAULT_CUSTOM_HMM_CUTOFFS_LOC), 
                    use_uniref=False, use_vogdb=False, kofam_use_dbcan2_thresholds=False, 
                    rename_genes=True, keep_tmp_dir=True, threads=10, verbose=True, 
                    make_new_faa:bool=None):
@@ -638,7 +636,7 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
     start_time = datetime.now()
     print('%s: Annotation started' % str(datetime.now()))
 
-    if len(curated_databases + custom_fa_db_loc + custom_hmm_loc) < 1:
+    if len(cazy_fa_db_loc + camper_hmm_loc) < 1:
         raise ValueError("For some reason there are no database selected to"
                          " annotate against. This is most likely a result of"
                          " bad arguments.")
@@ -647,15 +645,15 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
     tmp_dir = path.join(output_dir, 'working_dir')
     mkdir(tmp_dir)
 
-    # setup custom databases to be searched
-    custom_locs = process_custom(output_dir=path.join(tmp_dir, 'custom_dbs'), 
-                                       custom_fa_db_loc=custom_fa_db_loc,
-                                       custom_hmm_loc=custom_hmm_loc,
-                                       custom_name=custom_name,  
+    # setup camper databases to be searched
+    camper_locs = process_camper(output_dir=path.join(tmp_dir, 'custom_dbs'), 
+                                       custom_fa_db_loc=camper_fa_db_loc,
+                                       custom_hmm_loc=camper_hmm_loc,
+                                       custom_name=CAMPER_NAME,  
                                        threads=threads,
                                        verbose=verbose)
-    custom_fa_db_cutoffs_locs = process_custom_fa_db_cutoffs(custom_fa_db_cutoffs_loc, custom_name)
-    custom_hmm_cutoffs_locs = process_custom_hmm_cutoffs(custom_hmm_cutoffs_loc, custom_name)
+    camper_fa_db_cutoffs_locs = process_custom_fa_db_cutoffs(camper_fa_db_cutoffs_loc, CAMPER_NAME)
+    camper_hmm_cutoffs_locs = process_custom_hmm_cutoffs(camper_hmm_cutoffs_loc, CAMPER_NAME)
     print('%s: Retrieved database locations and descriptions' % (str(datetime.now() - start_time)))
 
     # annotate
@@ -672,8 +670,8 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
         annotations = pd.concat([
             orf for orf in
             annotate_orf(fasta_loc, curated_databases, fasta_dir,
-                         start_time, custom_locs,
-                         custom_hmm_cutoffs_locs, custom_fa_db_cutoffs_locs, 
+                         start_time, camper_locs,
+                         camper_hmm_cutoffs_locs, camper_fa_db_cutoffs_locs, 
                          bit_score_threshold, rbh_bit_score_threshold, 
                          kofam_use_dbcan2_thresholds,
                          threads, verbose)

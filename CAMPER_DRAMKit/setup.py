@@ -11,14 +11,13 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name="DRAM-bio",
+    name="CAMPER_DRAMKit",
     version=__version__,
-    # scripts=['scripts/DRAM.py', 'scripts/DRAM-v.py', 'scripts/DRAM-setup.py'],
     description="A tool to use the CAMPER dataset",
     long_description=long_description,
     long_description_content_type='text/markdown',  # Optional (see note above)
     packages=['camperkit'],
-    package_data={'camperkit': ['../CAMPERdb/*']},
+    package_data={'camperdb': ['../CAMPERdb/*']},
     python_requires='>=3.8',
     install_requires=['scikit-bio', 'pandas', 'altair', 'sqlalchemy', 'networkx', 'openpyxl', 'numpy', 'click'],
     entry_points={
