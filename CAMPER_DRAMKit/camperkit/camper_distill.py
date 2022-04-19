@@ -25,6 +25,7 @@ ETC_COVERAGE_COLUMNS = ['module_id', 'module_name', 'complex', 'genome', 'path_l
                         'percent_coverage', 'genes', 'missing_genes', 'complex_module_name']
 TAXONOMY_LEVELS = ['d', 'p', 'c', 'o', 'f', 'g', 's']
 
+
 # UTILS
 def get_ordered_uniques(seq):
     seen = set()
@@ -55,7 +56,7 @@ def get_ids_from_row(row):
                     for j in re.findall(r'\[PF\d\d\d\d\d.\d*\]', row['pfam_hits'])]
     # custom campers id
     if 'CAMPER_id' in row:
-        id_list += row['CAMPER_id']
+        id_list += [row['CAMPER_id']]
     return set(id_list)
 
 
@@ -86,8 +87,9 @@ def get_ids_from_annotation(frame):
         id_list += [j[1:-1].split('.')[0] for i in frame.pfam_hits.dropna()
                     for j in re.findall(r'\[PF\d\d\d\d\d.\d*\]', i)]
     if 'CAMPER_id' in frame:
-        id_list += [j.strip() for i in frame['CAMPER_id'].dropna() for j in i.split(',')]
+        id_list += frame['CAMPER_id'].dropna().apply(lambda x: x.strip()).tolist()
     return Counter(id_list)
+
 
 def fill_genome_summary_frame(annotations, genome_summary_frame, groupby_column):
     genome_summary_id_sets = [set([k.strip() for k in j.split(',')]) for j in genome_summary_frame['gene_id']]
@@ -617,10 +619,6 @@ def make_strings_no_repeats(genome_taxa_dict):
 @click.option('-a', '--annotations', help="annotations file, from dram annotate", 
               required=True)
 @click.option('-o', '--output_tsv', help="output tsv loctation, it can overwright!", required=False)
-# @click.option('--trna_path',
-#               help="past_annotations to append new annotations to.")
-# @click.option('--rrna_path',
-#               help="past_annotations to append new annotations to.")
 @click.option('--groupby_column', default='fasta', type=str,
               help="past_annotations to append new annotations to.")
 @click.option('--custom_distillate', 
@@ -640,106 +638,15 @@ def summarize_genomes(annotations,  output_tsv, groupby_column='fasta',
     if 'bin_taxnomy' in annotations:
         annotations = annotations.sort_values('bin_taxonomy')
 
-    # if trna_path is None:
-    #     trna_frame = None
-    # else:
-    #     trna_frame = pd.read_csv(trna_path, sep='\t')
-    # if rrna_path is None:
-    #     rrna_frame = None
-    # else:
-    #     rrna_frame = pd.read_csv(rrna_path, sep='\t')
-
-    # get db_locs and read in dbs
-    # database_handler = DatabaseHandler()
-    # if 'genome_summary_form' not in database_handler.dram_sheet_locs:
-    #     raise ValueError('Genome summary form location must be set in order to summarize genomes')
-    # if 'module_step_form' not in database_handler.dram_sheet_locs:
-    #     raise ValueError('Module step form location must be set in order to summarize genomes')
-    # if 'function_heatmap_form' not in database_handler.dram_sheet_locs:
-    #     raise ValueError('Functional heat map form location must be set in order to summarize genomes')
-
-    # read in dbs
     genome_summary_form = pd.read_csv(custom_distillate, sep='\t')
-    # genome_summary_form = pd.read_csv(database_handler.dram_sheet_locs['genome_summary_form'], sep='\t')
-    # if custom_distillate is not None:
-    #     genome_summary_form = pd.concat([genome_summary_form, pd.read_csv(custom_distillate, sep='\t')])
-    # genome_summary_form = genome_summary_form.drop('potential_amg', axis=1)
-    # module_steps_form = pd.read_csv(database_handler.dram_sheet_locs['module_step_form'], sep='\t')
-    # function_heatmap_form = pd.read_csv(database_handler.dram_sheet_locs['function_heatmap_form'], sep='\t')
-    # etc_module_df = pd.read_csv(database_handler.dram_sheet_locs['etc_module_database'], sep='\t')
-    # print('%s: Retrieved database locations and descriptions' % (str(datetime.now() - start_time)))
-
-    # make output folder
-    # mkdir(output_dir)
-
-    # make genome stats
-    # genome_stats = make_genome_stats(annotations, rrna_frame, trna_frame, groupby_column=groupby_column)
-    # genome_stats.to_csv(path.join(output_dir, 'genome_stats.tsv'), sep='\t', index=None)
-    # print('%s: Calculated genome statistics' % (str(datetime.now() - start_time)))
-
-    # make genome metabolism summary
-    # genome_summary = path.join(output_dir, 'metabolism_summary.xlsx')
-    if distillate_gene_names:
-        summarized_genomes = fill_genome_summary_frame_gene_names(annotations, genome_summary_form, groupby_column)
-    else:
-        breakpoint()
-        summarized_genomes = make_genome_summary(annotations, genome_summary_form, None, None, groupby_column)
+    # if distillate_gene_names:
+    # summarized_genomes = fill_genome_summary_frame_gene_names(annotations, genome_summary_form, groupby_column)
+    # else:
+    summarized_genomes = make_genome_summary(annotations, genome_summary_form, None, None, groupby_column)
+    print(summarized_genomes[summarized_genomes['gene_id'] == 'D00001'])
     summarized_genomes.drop(['sheet'], axis=1, inplace=True)
     summarized_genomes.to_csv(output_tsv, sep='\t', index=False)
 
-    #write_summarized_genomes_to_xlsx(summarized_genomes, genome_summary)
-    # print('%s: Generated genome metabolism summary' % (str(datetime.now() - start_time)))
-
-    # # make liquor
-    # if 'bin_taxonomy' in annotations:
-    #     genome_order = get_ordered_uniques(annotations.sort_values('bin_taxonomy')[groupby_column])
-    #     # if gtdb format then get phylum and most specific
-    #     if all([i[:3] == 'd__' and len(i.split(';')) == 7 for i in annotations['bin_taxonomy'].fillna('')]):
-    #         taxa_str_parser = get_phylum_and_most_specific
-    #     # else just throw in what is there
-    #     else:
-    #         taxa_str_parser = lambda x: x
-    #     labels = make_strings_no_repeats({row[groupby_column]: taxa_str_parser(row['bin_taxonomy'])
-    #                                      for _, row in annotations.iterrows()})
-    # else:
-    #     genome_order = get_ordered_uniques(annotations.sort_values(groupby_column)[groupby_column])
-    #     labels = None
-
-    # make module coverage frame
-    # module_nets = {module: build_module_net(module_df)
-    #                for module, module_df in module_steps_form.groupby('module') if module in HEATMAP_MODULES}
-
-    # if len(genome_order) > genomes_per_product:
-    #     module_coverage_dfs = list()
-    #     etc_coverage_dfs = list()
-    #     function_dfs = list()
-    #     # generates slice start and slice end to grab from genomes and labels from 0 to end of genome order
-    #     pairwise_iter = pairwise(list(range(0, len(genome_order), genomes_per_product)) + [len(genome_order)])
-    #     for i, (start, end) in enumerate(pairwise_iter):
-    #         genomes = genome_order[start:end]
-    #         annotations_subset = annotations.loc[[genome in genomes for genome in annotations[groupby_column]]]
-    #         dfs = fill_liquor_dfs(annotations_subset, module_nets, etc_module_df, function_heatmap_form,
-    #                               groupby_column='fasta')
-    #         module_coverage_df_subset, etc_coverage_df_subset, function_df_subset = dfs
-    #         module_coverage_dfs.append(module_coverage_df_subset)
-    #         etc_coverage_dfs.append(etc_coverage_df_subset)
-    #         function_dfs.append(function_df_subset)
-    #         liquor = make_liquor_heatmap(module_coverage_df_subset, etc_coverage_df_subset, function_df_subset,
-    #                                      genomes, labels)
-    #         liquor.save(path.join(output_dir, 'product_%s.html' % i))
-    #     liquor_df = make_liquor_df(pd.concat(module_coverage_dfs), pd.concat(etc_coverage_dfs), pd.concat(function_dfs))
-    #     liquor_df.to_csv(path.join(output_dir, 'product.tsv'), sep='\t')
-    # else:
-    #     module_coverage_df, etc_coverage_df, function_df = fill_liquor_dfs(annotations, module_nets,
-    #                                                                        etc_module_df,
-    #                                                                        function_heatmap_form,
-    #                                                                        groupby_column=groupby_column)
-    #     liquor_df = make_liquor_df(module_coverage_df, etc_coverage_df, function_df)
-    #     liquor_df.to_csv(path.join(output_dir, 'product.tsv'), sep='\t')
-    #     liquor = make_liquor_heatmap(module_coverage_df, etc_coverage_df, function_df, genome_order, labels)
-    #     liquor.save(path.join(output_dir, 'product.html'))
-    # print('%s: Generated product heatmap and table' % (str(datetime.now() - start_time)))
-    # print("%s: Completed distillation" % str(datetime.now() - start_time))
 
 
 if __name__ == "__main__":

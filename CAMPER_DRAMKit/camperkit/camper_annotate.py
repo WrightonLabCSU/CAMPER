@@ -1,35 +1,37 @@
-import pandas as pd 
+"""A cut down of dram annotator"""
 import re
-import click
-import os
-import re
-import io
-import time
-import click
 import warnings
 import subprocess
 from glob import glob
 from functools import partial
 from datetime import datetime
+from os import path, mkdir, stat
 from typing import Callable
 from skbio.io import read as read_sequence
-from os import path, mkdir, stat
-from shutil import rmtree, copy2
+from shutil import rmtree
 from skbio.io import write as write_sequence
 import pandas as pd
+import numpy as np
 import click
 # Remove
 
 
-MAG_DBS_TO_ANNOTATE = ('kegg', 'kofam', 'kofam_ko_list', 'uniref', 'peptidase', 'pfam', 'dbcan', 'vogdb')
-BOUTFMT6_COLUMNS = ['qId', 'tId', 'seqIdentity', 'alnLen', 'mismatchCnt', 'gapOpenCnt', 'qStart', 'qEnd', 'tStart',
-                    'tEnd', 'eVal', 'bitScore']
-HMMSCAN_ALL_COLUMNS = ['query_id', 'query_ascession', 'query_length', 'target_id', 'target_ascession', 'target_length',
-                       'full_evalue', 'full_score', 'full_bias', 'domain_number', 'domain_count', 'domain_cevalue',
-                       'domain_ievalue', 'domain_score', 'domain_bias', 'target_start', 'target_end', 'alignment_start',
-                       'alignment_end', 'query_start', 'query_end', 'accuracy', 'description']
-HMMSCAN_COLUMN_TYPES = [str, str, int, str, str, int, float, float, float, int, int, float, float, float, float, int,
-                        int, int, int, int, int, float, str]
+MAG_DBS_TO_ANNOTATE = ('kegg', 'kofam', 'kofam_ko_list', 'uniref', 
+                       'peptidase', 'pfam', 'dbcan', 'vogdb')
+BOUTFMT6_COLUMNS = ['qId', 'tId', 'seqIdentity', 'alnLen', 'mismatchCnt',
+                    'gapOpenCnt', 'qStart', 'qEnd', 'tStart', 'tEnd', 'eVal',
+                    'bitScore']
+HMMSCAN_ALL_COLUMNS = ['query_id', 'query_ascession', 'query_length', 
+                       'target_id', 'target_ascession', 'target_length',
+                       'full_evalue', 'full_score', 'full_bias', 
+                       'domain_number', 'domain_count', 'domain_cevalue',
+                       'domain_ievalue', 'domain_score', 'domain_bias',
+                       'target_start', 'target_end', 'alignment_start',
+                       'alignment_end', 'query_start', 'query_end', 'accuracy',
+                       'description']
+HMMSCAN_COLUMN_TYPES = [str, str, int, str, str, int, float, float, float, int,
+                        int, float, float, float, float, int, int, int, int, 
+                        int, int, float, str]
 
 
 def remove_suffix(text, suffix):
@@ -494,32 +496,6 @@ def process_custom_fa_db_cutoffs(custom_fa_db_cutoffs_loc, custom_name, verbose=
     return {custom_name[i]:j for i, j in enumerate(custom_fa_db_cutoffs_loc)}
 
 
-class Annotation:
-    def __init__(self, name, scaffolds, genes_faa, genes_fna, gff, gbk, annotations, trnas, rrnas):
-        # TODO: get abspath for every input file/dir
-        # TODO: check that files exist
-        self.name = name
-        self.scaffolds_loc = scaffolds
-        self.genes_faa_loc = genes_faa
-        self.genes_fna_loc = genes_fna
-        self.gff_loc = gff
-        self.gbk_loc = gbk
-        self.annotations_loc = annotations
-        self.trnas_loc = trnas
-        self.rrnas_loc = rrnas
-
-    def get_annotations(self):
-        return pd.read_csv(self.annotations_loc, index_col=0, sep='\t')
-
-    def get_trnas(self):
-        return pd.read_csv(self.trnas_loc, sep='\t')
-
-    def get_rrnas(self):
-        return pd.read_csv(self.rrnas_loc, sep='\t')
-
-
-
-
 def annotate_orf(gene_faa:str, curated_databases:list, tmp_dir:str, start_time, 
                  custom_locs=(), 
                  custom_hmm_cutoffs_locs=(), 
@@ -580,6 +556,25 @@ def check_fasta(input_faa):
 def get_fa_db_name(fasta_loc):
     return path.splitext(path.basename(remove_suffix(fasta_loc, '.gz')))[0]
 
+def merge_in_new_annotations(new_annotations:pd.DataFrame, past_annotations:pd.DataFrame):
+    past_cols = set(past_annotations.columns)
+    new_cols = set(new_annotations.columns)
+    if new_cols.issubset(past_cols):
+        raise Warning("You have passed an annotations file that containes"
+                      " columns matching the new annotations. You most"
+                      " likely are annotating with the same database again."
+                      " The falowing columns will be replaced in the new"
+                      " annotations file:\n%s" %
+                      past_cols.intersection(new_cols))
+    past_annotations = past_annotations[past_cols - new_cols]
+    while set(new_annotations.index) != set(past_annotations.index):
+        if np.all([new_annotations.index.str.startswith('genes_')]): 
+            new_annotations.index = new_annotations.index.str[6:]
+            continue
+        raise ValueError("The name in the genes.faa file dose not match the"
+                         " annotations provided. Thus the old annotations can't"
+                         " be merged to.")
+    new_annotations = pd.merge(past_annotations, new_annotations, how="left", left_index=True, right_index=True)
 
 @click.command("annotate_genes")
 @click.option('-i', '--input_faa', help="fasta file, optionally with wildcards to point to "
@@ -702,15 +697,8 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
     all_annotations = all_annotations.sort_values('fasta')
     if past_annotations_path is not None:
         past_annotations = pd.read_csv(past_annotations_path, sep='\t', index_col=0)
-        if set(past_annotations.columns).issubset(set(all_annotations.columns)):
-            raise Warning("You have passed an annotations file that containes"
-                          " columns matching the new annotations. You most"
-                          " likely are annotating with the same database again."
-                          " The falowing columns will be replaced in the new"
-                          " annotations file:\n%s" %
-                          set(past_annotations.columns).intersection(set(all_annotations.columns)))
-        all_annotations = all_annotations[set(all_annotations.columns) - set(past_annotations.columns)]
-        all_annotations = pd.merge(all_annotations, past_annotations, how="outer", left_index=True, right_index=True)
+        merge_in_new_annotations(new_annotations = all_annotations, 
+                                 past_annotations = past_annotations)
     all_annotations.to_csv(path.join(output_dir, 'annotations.tsv'), sep='\t')
     if len(faa_locs) > 0:
         merge_files(faa_locs, path.join(output_dir, 'genes.faa'))
@@ -737,11 +725,8 @@ if __name__ == "__main__":
 # i would like to run the annotations against all EMERGE mag genes - but i will wait all mags finish annotating. in the mean time, you can use the mags annotated here:
 # /home/projects-wrighton-2/EMERGE_DRAM/97_clusters
 
-import os
-os.system("rm -rf ./output/t1")
-os.system( "python3 workflow/scripts/camper_annotate.py  -i /home/projects-wrighton-2/EMERGE_DRAM/97_clusters/20100900_E1D_13_annotated/genes.faa  --custom_fa_db_loc ./CAMPER/CAMPER_blast.faa  --custom_hmm_loc ./CAMPER/CAMPER.hmm --custom_hmm_cutoffs_loc ./CAMPER/CAMPER_hmm_scores.tsv --custom_fa_db_cutoffs_loc CAMPER/CAMPER_blast_scores.tsv --custom_name CAMPER -o ./output/t1")
-
-os.system( "python ./camper_annotate.py  -a /home/projects-wrighton-2/EMERGE_DRAM/97_clusters/20100900_E1D_13_annotated/annotations.tsv -i /home/projects-wrighton-2/EMERGE_DRAM/97_clusters/20100900_E1D_13_annotated/genes.faa  --custom_fa_db_loc ./CAMPER/CAMPER_blast.faa  --custom_hmm_loc ./CAMPER/CAMPER.hmm --custom_hmm_cutoffs_loc ./CAMPER/CAMPER_hmm_scores.tsv --custom_fa_db_cutoffs_loc CAMPER/CAMPER_blast_scores.tsv --custom_name CAMPER -o ./output/t2")
+os.system("rm -rf ./output/t2")
+os.system( "python CAMPER/camper_dram/camper_annotate.py  -a /home/projects-wrighton-2/EMERGE_DRAM/97_clusters/20100900_E1D_13_annotated/annotations.tsv -i /home/projects-wrighton-2/EMERGE_DRAM/97_clusters/20100900_E1D_13_annotated/genes.faa  --custom_fa_db_loc ./CAMPER/data/CAMPER_blast.faa  --custom_hmm_loc ./CAMPER/data/CAMPER.hmm --custom_hmm_cutoffs_loc ./CAMPER/data/CAMPER_hmm_scores.tsv --custom_fa_db_cutoffs_loc CAMPER/data/CAMPER_blast_scores.tsv --custom_name CAMPER -o ./output/t2")
 """
 
 

@@ -22,8 +22,15 @@ count_motifs, strip_endings, process_custom, \
 
 
 @pytest.fixture()
+def prodigal_dir(fasta_loc, tmpdir):
+    prodigal_output = tmpdir.mkdir('prodigal_output')
+    gff, fna, faa = run_prodigal(fasta_loc, str(prodigal_output))
+    return gff, fna, faa
+
+
+@pytest.fixture()
 def fasta_loc():
-    return os.path.join('tests', 'data', 'NC_001422.fasta')
+    return os.path.join('test_data', 'NC_001422.fasta')
 
 
 def test_camper_hmmscan_formater():
@@ -63,14 +70,6 @@ def test_camper_blast_search_formater():
     assert received.equals(expected), "Something wrong with camper blast search"
 
 
-
-@pytest.fixture()
-def prodigal_dir(fasta_loc, tmpdir):
-    prodigal_output = tmpdir.mkdir('prodigal_output')
-    gff, fna, faa = run_prodigal(fasta_loc, str(prodigal_output))
-    return gff, fna, faa
-
-
 @pytest.fixture()
 def prodigal_gff(prodigal_dir):
     return prodigal_dir[0]
@@ -107,7 +106,7 @@ def mmseqs_db(prodigal_faa, mmseqs_db_dir):
 
 @pytest.fixture()
 def phix_proteins():
-    return os.path.join('tests', 'data', 'NC_001422.faa')
+    return os.path.join('test_data', 'NC_001422.faa')
 
 
 @pytest.fixture()
@@ -140,8 +139,8 @@ def test_get_reciprocal_best_hits(reverse_best_hits_loc):
 
 @pytest.fixture()
 def processed_hits():
-    forward = os.path.join('tests', 'data', 'query_target_hits.b6')
-    reverse = os.path.join('tests', 'data', 'target_query_hits.b6')
+    forward = os.path.join('test_data', 'query_target_hits.b6')
+    reverse = os.path.join('test_data', 'target_query_hits.b6')
     processed_hits = process_reciprocal_best_hits(forward, reverse)
     return processed_hits
 
@@ -325,16 +324,6 @@ def phix_annotations():
                         columns=['rank', 'kegg_hit', 'uniref_hit', 'pfam_hits', 'bin_taxonomy'])
 
 
-def test_generate_annotated_fasta_short(phix_prodigal_genes, phix_annotations):
-    fasta_generator_short = generate_annotated_fasta(phix_prodigal_genes, phix_annotations, verbosity='short',
-                                                     name='phiX')
-    short_fasta_header_dict = {seq.metadata['id']: seq.metadata['description'] for seq in fasta_generator_short}
-
-    assert short_fasta_header_dict['phiX_NC_001422.1_1'] == 'rank: A; K1 (db=kegg)'
-    assert short_fasta_header_dict['phiX_NC_001422.1_2'] == 'rank: B; U2 (db=uniref)'
-    assert short_fasta_header_dict['phiX_NC_001422.1_4'] == 'rank: D; P4 (db=pfam)'
-
-
 @pytest.fixture()
 def phix_annotations_no_kegg():
     return pd.DataFrame([['B', 'U1', None, 'a_bug1'],
@@ -347,72 +336,6 @@ def phix_annotations_no_kegg():
                         index=['NC_001422.1_1', 'NC_001422.1_2', 'NC_001422.1_3', 'NC_001422.1_4', 'NC_001422.1_5',
                                'NC_001422.1_6', 'NC_001422.1_7'],
                         columns=['rank', 'uniref_hit', 'pfam_hits', 'bin_taxonomy'])
-
-
-def test_generate_annotated_fasta_short_no_kegg(phix_prodigal_genes, phix_annotations_no_kegg):
-    # drop kegg hit column
-    fasta_generator_short_no_kegg = generate_annotated_fasta(phix_prodigal_genes, phix_annotations_no_kegg,
-                                                             verbosity='short', name='phiX')
-    short_fasta_header_dict_no_kegg = {seq.metadata['id']: seq.metadata['description']
-                                       for seq in fasta_generator_short_no_kegg}
-    print(short_fasta_header_dict_no_kegg)
-
-    assert short_fasta_header_dict_no_kegg['phiX_NC_001422.1_1'] == 'rank: B; U1 (db=uniref)'
-    assert short_fasta_header_dict_no_kegg['phiX_NC_001422.1_2'] == 'rank: B; U2 (db=uniref)'
-    assert short_fasta_header_dict_no_kegg['phiX_NC_001422.1_4'] == 'rank: D; P4 (db=pfam)'
-
-
-def test_generate_annotated_fasta_long(phix_prodigal_genes, phix_annotations):
-    fasta_generator_long = generate_annotated_fasta(phix_prodigal_genes, phix_annotations, verbosity='long',
-                                                    name='phiX')
-    long_fasta_header_dict = {seq.metadata['id']: seq.metadata['description'] for seq in fasta_generator_long}
-    assert long_fasta_header_dict['phiX_NC_001422.1_1'] == 'rank: A; K1 (db=kegg); U1 (db=uniref); a_bug1'
-
-
-def test_create_annotated_fasta(phix_prodigal_genes, phix_annotations, tmpdir):
-    filt_fasta = tmpdir.mkdir('test_annotate_fasta').join('annotated_fasta.faa')
-    create_annotated_fasta(phix_prodigal_genes, phix_annotations, str(filt_fasta))
-    assert os.path.isfile(filt_fasta)
-
-
-def test_generate_renamed_fasta(fasta_loc):
-    genome_fasta_header_dict = {seq.metadata['id']: seq.metadata['description']
-                                for seq in generate_renamed_fasta(fasta_loc, 'phiX')}
-    assert len(genome_fasta_header_dict) == 1
-    assert genome_fasta_header_dict['phiX_NC_001422.1'] == 'Coliphage phi-X174, complete genome'
-
-
-def test_rename_fasta(fasta_loc, tmpdir):
-    filt_fasta = tmpdir.mkdir('test_annotate_scaffolds').join('annotated_fasta.fasta')
-    rename_fasta(fasta_loc, str(filt_fasta), 'phiX')
-    assert os.path.isfile(filt_fasta)
-
-
-def test_run_trna_scan(tmpdir):
-    filt_fasta = tmpdir.mkdir('test_trnascan1')
-    no_trna = run_trna_scan(os.path.join('tests', 'data', 'e_coli_16S.fasta'), str(filt_fasta), 'no_trnas',
-                            threads=1, verbose=False)
-    assert no_trna is None
-
-    filt_fasta = tmpdir.mkdir('test_trnascan2')
-    trnas_loc = os.path.join('tests', 'data', 'trnas.fa')
-    trnas = run_trna_scan(trnas_loc, str(filt_fasta), 'phiX', threads=1, verbose=False)
-    assert trnas.shape == (6, 9)
-
-
-
-class FakeDatabaseHandler:
-    @staticmethod
-    def get_database_names():
-        return []
-
-
-def test_do_blast_style_search(mmseqs_db, target_mmseqs_db, tmpdir):
-    database_handler = FakeDatabaseHandler()
-    working_dir = tmpdir.mkdir('test_blast_search')
-    get_fake_description = partial(get_basic_description, db_name='fake')
-    do_blast_style_search(mmseqs_db, target_mmseqs_db, str(working_dir), database_handler, get_fake_description,
-                          datetime.now(), db_name='fake', threads=1)
 
 
 def test_count_motifs(phix_proteins):
@@ -428,36 +351,14 @@ def test_strip_endings():
     assert strip_endings('123456', ['.efg', '.jkl']) == '123456'
 
 
-def test_process_custom_dbs(phix_proteins, tmpdir):
-    custom_db_dir = tmpdir.mkdir('custom_dbs')
-    process_custom_dbs([phix_proteins], ['phix'], os.path.join(custom_db_dir, 'custom_dbs0'))
-    assert os.path.isfile(os.path.join(custom_db_dir, 'custom_dbs0', 'phix.custom.mmsdb'))
-    process_custom_dbs(None, None, os.path.join(custom_db_dir, 'custom_dbs1'))
-    assert len(os.listdir(os.path.join(custom_db_dir, 'custom_dbs1'))) == 0
-    with pytest.raises(ValueError):
-        process_custom_dbs(['thing1', 'thing2'], ['thing1'], os.path.join(custom_db_dir, 'custom_dbs2'))
-
-
-def test_get_dubs():
-    w_dups = [True, False, True, True]
-    assert get_dups(w_dups) == [True, True, False, False]
-    no_dups = ['a', 'b', 'c']
-    assert get_dups(no_dups) == [True, True, True]
-
-
 def test_parse_hmmsearch_domtblout():
-    parsed_hit = parse_hmmsearch_domtblout(os.path.join('tests', 'data', 'hmmsearch_hit.txt'))
+    parsed_hit = parse_hmmsearch_domtblout(os.path.join('test_data', 'hmmsearch_hit.txt'))
     assert parsed_hit.shape == (1, 23)
     assert parsed_hit.loc[0, 'query_id'] == 'NP_040710.1'
     assert parsed_hit.loc[0, 'query_length'] == 38
     assert parsed_hit.loc[0, 'target_id'] == 'Microvir_J'
     assert parsed_hit.loc[0, 'target_ascession'] == 'PF04726.13'
     assert parsed_hit.loc[0, 'full_evalue'] == 6.900000e-31
-
-
-@pytest.fixture()
-def annotated_fake_gff_loc():
-    return os.path.join('tests', 'data', 'annotated_fake_gff.gff')
 
 
 @pytest.fixture()
