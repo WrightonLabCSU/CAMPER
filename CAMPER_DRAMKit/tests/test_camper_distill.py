@@ -9,6 +9,7 @@ from camper_dramkit.camper_distill import fill_genome_summary_frame, summarize_r
 
 
 
+
 @pytest.fixture()
 def annotations():
     return pd.DataFrame([['genome', 'K00001'],

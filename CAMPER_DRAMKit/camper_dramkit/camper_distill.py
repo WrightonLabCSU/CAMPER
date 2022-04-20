@@ -11,6 +11,18 @@ import re
 import numpy as np
 from datetime import datetime
 from camper_dramkit.camper_annotate import CAMPER_NAME
+import yaml
+import urllib.request
+
+YAML_PATH = os.path.join(os.path.dirname(__file__), 'data_locs.yaml')
+YAML_PATH = 'data_locs.yaml'
+# Write YAML file
+with io.open('data.yaml', 'w', encoding='utf8') as outfile:
+    yaml.dump(data, outfile, default_flow_style=False, allow_unicode=True)
+
+# Read YAML file
+with open(YAML_PATH, 'r') as stream:
+    data_loaded = yaml.safe_load(stream)
 
 
 # TODO: add RBH information to output
@@ -28,7 +40,22 @@ ETC_COVERAGE_COLUMNS = ['module_id', 'module_name', 'complex', 'genome', 'path_l
                         'percent_coverage', 'genes', 'missing_genes', 'complex_module_name']
 TAXONOMY_LEVELS = ['d', 'p', 'c', 'o', 'f', 'g', 's']
 
-DEFAULT_CAMPER_DIST = os.path.join(os.path.dirname(__file__),  "..", "CAMPERdb", "CAMPER_distillate.tsv")
+#DEFAULT_CAMPER_DIST = os.path.join(os.path.dirname(__file__),  "CAMPERdb", "CAMPER_distillate.tsv")
+#DEFAULT_CAMPER_DIST_URL = 'https://raw.githubusercontent.com/WrightonLabCSU/CAMPER/main/CAMPER_distillate.tsv'
+#DEFAULT_CUSTOM_FA_DB_LOC = os.path.join(os.path.dirname(__file__),  "..", "CAMPERdb", "CAMPER_blast.faa")
+#DEFAULT_CUSTOM_HMM_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPERdb", "CAMPER.hmm")
+#DEFAULT_CUSTOM_HMM_CUTOFFS_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPERdb", "CAMPER_hmm_scores.tsv")
+#DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPERdb", "CAMPER_blast_scores.tsv")
+#DEFAULT_CAMPER_DIST = os.path.join(os.path.dirname(__file__),  "CAMPERdb", "CAMPER_distillate.tsv")
+
+# print ("download start!")
+# filename, headers = urllib.request.urlretrieve(
+#     DEFAULT_CAMPER_DIST_URL, 
+#     filename="./")
+# print ("download complete!")
+
+
+
 
 
 # UTILS
@@ -36,16 +63,6 @@ def get_ordered_uniques(seq):
     seen = set()
     seen_add = seen.add
     return [x for x in seq if not (x in seen or seen_add(x))]
-
-
-def download_file(url, output_file=None, verbose=True):
-    # TODO: catching error 4 and give error message to retry or retry automatically
-    if verbose:
-        print('downloading %s' % url)
-    if output_file is None:
-        return urlopen(url).read().decode('utf-8')
-    else:
-        run_process(['wget', '-O', output_file, url], verbose=verbose)
 
 
 def get_ids_from_row(row):

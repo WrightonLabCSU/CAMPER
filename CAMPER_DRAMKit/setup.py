@@ -17,9 +17,16 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',  # Optional (see note above)
     packages=['camper_dramkit'],
-    package_data={'CAMPERdb': ['CAMPERdb/*']},
+    include_package_data=True,
+    # data_files=[
+    #     ('camper_dramkit/CAMPERdb', ["../CAMPER.hmm", "../CAMPER_blast_scores.tsv", 
+    #                   "../CAMPER_distillate.tsv", "../CAMPER_hmm_scores.tsv"])
+    # ],
+    package_data={'camper_dramkit': ["../CAMPER.hmm", "../CAMPER_blast_scores.tsv", 
+                      "../CAMPER_distillate.tsv", "../CAMPER_hmm_scores.tsv"]},
     python_requires='>=3.8',
-    install_requires=['scikit-bio', 'pandas', 'altair', 'sqlalchemy', 'networkx', 'openpyxl', 'numpy', 'click'],
+    # install_requires=['pandas', 'altair', 'sqlalchemy', 'networkx', 'openpyxl', 'numpy', 'click', 'scikit-bio'],
+    install_requires=['pandas', 'altair', 'sqlalchemy', 'networkx', 'openpyxl', 'numpy', 'click', 'scikit-bio'],
     entry_points={
         'console_scripts': [
             'camper_distill = camper_dramkit.camper_distill:summarize_genomes',

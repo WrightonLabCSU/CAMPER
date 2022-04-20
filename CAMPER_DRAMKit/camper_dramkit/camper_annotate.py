@@ -14,13 +14,10 @@ from skbio.io import write as write_sequence
 import pandas as pd
 import numpy as np
 import click
+import urllib.request
 # Remove
 
 CAMPER_NAME = "CAMPER"
-DEFAULT_CUSTOM_FA_DB_LOC = os.path.join(os.path.dirname(__file__),  "..", "CAMPERdb", "CAMPER_blast.faa")
-DEFAULT_CUSTOM_HMM_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPERdb", "CAMPER.hmm")
-DEFAULT_CUSTOM_HMM_CUTOFFS_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPERdb", "CAMPER_hmm_scores.tsv")
-DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC = os.path.join(os.path.dirname(__file__), "..", "CAMPERdb", "CAMPER_blast_scores.tsv")
 
 MAG_DBS_TO_ANNOTATE = ('kegg', 'kofam', 'kofam_ko_list', 'uniref', 
                        'peptidase', 'pfam', 'dbcan', 'vogdb')
