@@ -1,13 +1,26 @@
 from setuptools import setup, find_packages
 from camper_dramkit import __version__ as version
-from os import path
+import os
 
 __author__ = 'rmflynn'
 __version__ = version
 
-here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+here = os.path.abspath(os.path.dirname(__file__))
+data_folder = os.path.join(here, 'camper_dramkit', 'data')
+os.mkdir(data_folder)
+os.rename(os.path.join(here, '..', 'CAMPER_blast.faa'),
+          os.path.join(data_folder, 'CAMPER_blast.faa'))
+os.rename(os.path.join(here, '..', 'CAMPER_blast_scores.tsv'),
+          os.path.join(data_folder, 'CAMPER_blast_scores.tsv'))
+os.rename(os.path.join(here, '..', 'CAMPER.hmm'),
+          os.path.join(data_folder, 'CAMPER.hmm'))
+os.rename(os.path.join(here, '..', 'CAMPER_distillate.tsv'),
+          os.path.join(data_folder, 'CAMPER_distillate.tsv'))
+os.rename(os.path.join(here, '..', 'CAMPER_hmm_scores.tsv'),
+          os.path.join(data_folder, 'CAMPER_hmm_scores.tsv'))
+
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
@@ -17,7 +30,8 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',  # Optional (see note above)
     packages=['camper_dramkit'],
-    package_data={'CAMPERdb': ['CAMPERdb/*']},
+    package_dir={'camper_dramkit': 'camper_dramkit'},
+    package_data={'camper_dramkit': ['data/*']},
     python_requires='>=3.8',
     install_requires=['scikit-bio', 'pandas', 'altair', 'sqlalchemy', 'networkx', 'openpyxl', 'numpy', 'click'],
     entry_points={

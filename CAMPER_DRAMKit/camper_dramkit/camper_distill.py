@@ -28,7 +28,7 @@ ETC_COVERAGE_COLUMNS = ['module_id', 'module_name', 'complex', 'genome', 'path_l
                         'percent_coverage', 'genes', 'missing_genes', 'complex_module_name']
 TAXONOMY_LEVELS = ['d', 'p', 'c', 'o', 'f', 'g', 's']
 
-DEFAULT_CAMPER_DIST = os.path.join(os.path.dirname(__file__) , "..", "CAMPER_distillate.tsv")
+DEFAULT_CAMPER_DIST = os.path.join(os.path.dirname(__file__) , "data", "CAMPER_distillate.tsv")
 
 
 # UTILS
