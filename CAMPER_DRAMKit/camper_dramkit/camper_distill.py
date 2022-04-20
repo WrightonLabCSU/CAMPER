@@ -28,7 +28,7 @@ ETC_COVERAGE_COLUMNS = ['module_id', 'module_name', 'complex', 'genome', 'path_l
                         'percent_coverage', 'genes', 'missing_genes', 'complex_module_name']
 TAXONOMY_LEVELS = ['d', 'p', 'c', 'o', 'f', 'g', 's']
 
-DEFAULT_CAMPER_DIST = os.path.join(os.path.dirname(__file__),  "..", "CAMPERdb", "CAMPER_distillate.tsv")
+DEFAULT_CAMPER_DIST = os.path.join(os.path.dirname(__file__) , "..", "CAMPER_distillate.tsv")
 
 
 # UTILS
@@ -36,16 +36,6 @@ def get_ordered_uniques(seq):
     seen = set()
     seen_add = seen.add
     return [x for x in seq if not (x in seen or seen_add(x))]
-
-
-def download_file(url, output_file=None, verbose=True):
-    # TODO: catching error 4 and give error message to retry or retry automatically
-    if verbose:
-        print('downloading %s' % url)
-    if output_file is None:
-        return urlopen(url).read().decode('utf-8')
-    else:
-        run_process(['wget', '-O', output_file, url], verbose=verbose)
 
 
 def get_ids_from_row(row):
