@@ -1,0 +1,40 @@
+blast_name	A_rank	B_rank	score_type	definition	ID_for_distillate
+D00008;SesA	200	120	full	SesA; THF-dependent sesamin/sesamin-monocatechol methylenetransferase	D00008
+D00010;Ber	200	120	full	BER; benzyl ether reductase	D00010
+D00011;Glm	200	120	full	GLM; guaiacol lignan methyltransferase	D00011
+D00012;Cldh	200	120	full	CLD; catechol lignan dehydroxylase	D00012
+D00013;Edl	200	120	full	EDL; END lactonizing enzyme	D00013
+D00014;CarE	200	120	full	CarE;electron transfer flavoprotein B	D00014
+D00015;CarD	200	120	full	CarD;electron transfer flavoprotein A	D00015
+D00016;CarC	200	120	full	CarC;caffeyl-CoA reductase 	D00016
+D00017;CarB	200	120	full	CarB;caffeyl-CoA synthetase 	D00017
+D00018;CarA	200	120	full	CarA;hydrocaffeyl-CoA:caffeate CoA transferase	D00018
+D00019;CurA	200	120	full	CurA; curcumin/dihydrocurcumin reductase	D00019
+D00020;PghtA	200	120	full	pgthA;pyrogallol-phloroglucinol transhydroxylase subunit A	D00020
+D00021;PghtB	200	120	full	pgthB;pyrogallol-phloroglucinol transhydroxylase subunit B	D00021
+D00022;DDRC	200	120	full	DDRC;dihydrodaidzein racemase	D00022
+D00023;PGR_WP.007489454	200	120	full	PGR;phloroglucinol reductase	D00023
+D00024;EHYA_AAM21267.1	200	120	full	EhyA;eugenol hydroxylase subunit A	D00024
+D00024;EHYA_CAB64353.1	200	120	full	EhyA;eugenol hydroxylase subunit A	D00024
+D00025;EHYB_AAM21269.1	200	120	full	EhyB;eugenol hydroxylase subunit B	D00025
+D00025;EHYB_CAB64355.1	200	120	full	EhyB;eugenol hydroxylase subunit B	D00025
+D00026;CalA_CAB69495.1	200	120	full	CalA;coniferyl alcohol dehydrogenase	D00026
+D00027;IEM_BAF62888	200	120	full	IEM;isoeugenol monooxygenase	D00027
+D00027;IEM_CAB69485	200	120	full	IEM;isoeugenol monooxygenase	D00027
+D00028;PhcC_BAK65623.1	200	120	full	PhcC;(+)-dehydrodiconiferyl acid dehydrogenase	D00028
+D00029;PhcD_BAK65625.1	200	120	full	PhcD;(-)-dehydrodiconiferyl acid dehydrogenase/hydroxylase	D00029
+D00030;PhcF_BAK65611.1	200	120	full	PhcF;(+)-DCA-CC decarboxylase	D00030
+D00031;PhcG_BAK65612.1	200	120	full	PhcG;(-)-DCA-CC decarboxylase	D00031
+D00032;PAH	200	120	full	PAH;pinoresinol-a-hydroxylase	D00032
+D00032;PAH_BurkholderiaSGMS1	200	120	full	PAH;pinoresinol-a-hydroxylase	D00032
+D00033;PinZ	200	120	full	PinZ; pinoresinol reductase	D00033
+D00034;chlE_A0A1B1WA13_BACAM	200	120	full	ChlE;chlorogenic acid esterase	D00034
+D00034;chlE_Q8RLZ8_ACIAD	200	120	full	ChlE;chlorogenic acid esterase	D00034
+D00035;FdeE_ADJ62524.1	200	120	full	FdeE;naringenin hydroxylase	D00035
+D00036;FdeC_ADJ62522.1	200	120	full	FdeC;naringenin dioxygenase	D00036
+D00037;CalB_CAB69493.1	200	120	full	CalB;coniferyl aldehyde dehydrogenase	D00037
+D00038;FCS_CAB69489.1	200	120	full	FCS;feruloyl-CoA synthetase	D00038
+D00039;Sam5_ABC88666.1	200	120	full	sam5;flavonoid hydroxylase	D00039
+D00040;QueD_A2VA43_9ACTN	200	120	full	quercetin-2,3-dioxygenase	D00040
+D00040;QueD_QDOI	200	120	full	quercetin-2,3-dioxygenase	D00040
+D00041;GARD_GRDC_RHIRD	200	120	full	GRAD;γ-resorcylic acid decarboxylase,EC:4.1.1.103	D00041
