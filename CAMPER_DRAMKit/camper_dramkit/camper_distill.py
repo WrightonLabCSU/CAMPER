@@ -38,6 +38,16 @@ def get_ordered_uniques(seq):
     return [x for x in seq if not (x in seen or seen_add(x))]
 
 
+def download_file(url, output_file=None, verbose=True):
+    # TODO: catching error 4 and give error message to retry or retry automatically
+    if verbose:
+        print('downloading %s' % url)
+    if output_file is None:
+        return urlopen(url).read().decode('utf-8')
+    else:
+        run_process(['wget', '-O', output_file, url], verbose=verbose)
+
+
 def get_ids_from_row(row):
     id_list = list()
     # get kegg gene ids
