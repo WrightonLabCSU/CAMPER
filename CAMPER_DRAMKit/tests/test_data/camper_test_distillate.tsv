@@ -1,0 +1,76 @@
+gene_id	gene_description	module	header	subheader	potential_amg	genes
+AA1	AA1 Laccase / p-diphenol:oxygen oxidoreductase / ferroxidase (EC 1.10.3.2); ; ferroxidase (EC 1.10.3.-); Laccase-like multicopper oxidase (EC 1.10.3.-)	Polyphenols;Polymer	non-specific oxidation	non-specific	True	0
+AA2	AA2 manganese peroxidase (EC 1.11.1.13); versatile peroxidase (EC 1.11.1.16); lignin peroxidase (EC 1.11.1.14); peroxidase (EC 1.11.1.-)	Polyphenols;Polymer	non-specific oxidation	non-specific	True	0
+AA6	AA6 1,4-benzoquinone reductase (EC. 1.6.5.6)	Polyphenols;Polymer	non-specific oxidation	non-specific	True	0
+AA4	AA4 vanillyl-alcohol oxidase (EC 1.1.3.38)	Polyphenols;;;;	non-specific oxidation	non-specific	True	0
+K10759,EC:3.1.1.20	tannin feruloyl esterase	Polyphenols;Hydrolyzable_Tannins;;;	hydrolyzable tannin depolymerization	ellagitannin => ellagic acid	True	0
+D00034,EC:3.1.1.42	ChlE;chlorogenic acid esterase	Polyphenols;Phenolic_acids;Hydroxycinnamic_acids;Chlorogenic_acid	chlorogenic acid degradation (oxic or anoxic)	chlorogenate => caffeic acid + quinate	True	0
+K09252,EC:3.1.1.73	feruloyl esterase	Polyphenols;Phenolic_acids;Hydroxycinnamic_acids;Ferulic_acid	lignocellulose depolymerization	feruloyl-polysaccharide => ferulic acid + polysaccharide	True	0
+D00008	SesA; THF-dependent sesamin/sesamin-monocatechol methylenetransferase	Polyphenols;Lignans;Lignans;Sesamin	sesamin degradation (anoxic), Step 1	sesamin => sesamin mono- => di-catechol + 5,10-CH2-THF	True	0
+D00010	BER; benzyl ether reductase	Polyphenols;Lignans;Lignans;Pinoresinol	pinoresinol conversion (anoxic), Step 1 Route 1	pinoresinol => secoisolariciresional	True	0
+D00011	GLM; guaiacol lignan methyltransferase	Polyphenols;Lignans;Lignans;Secoisolariciresinol	pinoresinol conversion (anoxic), Step 2 Route 1	Secoisolariciresinol=> didemethyl-secoisolariciresional	True	0
+D00012	CLD; catechol lignan dehydroxylase	Polyphenols;Lignans;Lignans;Didemethyl-secoisolariciresional	pinoresinol conversion (anoxic), Step 3 Route 1	didemethyl-secoisolariciresional => enterodiol	True	0
+D00013	EDL; END lactonizing enzyme	Polyphenols;Lignans;Lignans;Enterodiol	pinoresinol conversion (anoxic), Step 4 Route 1	enterodiol => enterolactone	True	0
+D00033	PinZ; pinoresinol reductase	Polyphenols;Lignans;Lignans;Pinoresinol	pinoresinol conversion (anoxic), Step 1 Route 2	pinoresinol => lariciresional => secoisolariciresional	True	0
+D00032	PAH;pinoresinol-a-hydroxylase	Polyphenols;Lignans;Lignans;Pinoresinol	pinoresinol conversion (oxic), Step 1	"(+)-pinoresinol => (+)-6-hydroxypinoresinol	"	True	0
+D00019	CurA; curcumin/dihydrocurcumin reductase	Polyphenols;Other_polyphenols;Curcuminoids;Curcumin	curcumin conversion (anoxic), Step 1	curcumin => tetrahydrocurcumin	True	0
+D00009	FLR; Flavone/flavonol reductase 	Polyphenols;Flavonoids;Flavones;	flavone degradation (anoxic), Step 1	flavones => flavanones	True	0
+D00003	CHI; Chalcone isomerase	Polyphenols;Flavonoids;Flavanones;	flavone degradation (anoxic), Step 2a (optional)	flavanones <=> chalcones	True	0
+D00001	FCR; Flavanone/flavanonol-cleaving reductase	Polyphenols;Flavonoids;Flavanones;	flavone degradation (anoxic), Step 2b	flavanones => dihydrochalcones	True	0
+D00006,K22906 	PHY; Phloretin hydrolase [EC:3.7.1.4]	Polyphenols;Flavonoids;Dihydrochalcone;	flavone degradation (anoxic), Step 3	dihydrochalcone => phloroglucinol + 3-(4-hydroxyphenyl)propionic acid	True	0
+D00009	FLR; Flavone/flavonol reductase 	Polyphenols;Flavonoids;Flavonols;	flavonol degradation (anoxic), Step 1	flavonols => flavanonols	True	0
+D00003	CHI; Chalcone isomerase	Polyphenols;Flavonoids;Flavanonols;	flavonol degradation (anoxic), Step 2a (optional)	flavanonols => auronols	True	0
+D00001	FCR; Flavanone/flavanonol-cleaving reductase	Polyphenols;Flavonoids;Flavanonols;	flavonol degradation (anoxic), Step 2b	flavanonols => hydroxydihydrochalcones	True	0
+D00006,K22906 	PHY; Phloretin hydrolase [EC:3.7.1.4]	Polyphenols;Flavonoids;Hydroxydihydrochalcones;	flavonol degradation (anoxic), Step 3	hydroxydihydrochalcones => phloroglucinol + caffeic acid	True	0
+D00040,K07155,K06911,EC:1.13.11.24	quercetin-2,3-dioxygenase	Polyphenols;Flavonoids;Flavonols;Quercetin	quercetin degradation (oxic); Step 1	quercetin => 2-(3,4-dihydroxybenzoyloxy)-4,6-dihydroxybenzoate	True	0
+D00002	DZR;daidzein reductase	Polyphenols;Flavonoids;Isoflavonoids;	Isoflavonoid conversion (anoxic), Step 1	daidzein => dihydrodaidzein, genistein => dihydrogenistein	True	0
+D00022	DDRC;dihydrodaidzein racemase	Polyphenols;Flavonoids;Isoflavonoids;	Isoflavonoid conversion (anoxic), Step 2a (optional)	(R)-dihydrodaidzein <=> (S)-dihydrodaidzein	True	0
+D00005	DDR;dihydrodaidzein reductase	Polyphenols;Flavonoids;Isoflavonoids;	Isoflavonoid conversion (anoxic), Step 2b	dihydrodaidzein => tetrahydrodaidzein, dihydrogenistein => tetrahydrogenistein	True	0
+D00004	TDR;tetrahydrodaidzein reductase	Polyphenols;Flavonoids;Isoflavonoids;	Isoflavonoid conversion (anoxic), Step 3	tetrahydrodaidzein => equol, tetrahydrogenistein => 5-hydroxy-equol	True	0
+D00035	FdeE;naringenin hydroxylase	Polyphenols;Flavonoids;Flavanones;Naringenin	flavanone degradation (oxic), Step 1	naringenin =>  8-hydroxynaringenin	True	0
+D00036	FdeC;naringenin dioxygenase	Polyphenols;Flavonoids;Flavanones;8-hydroxynaringenin	flavanone degradation (oxic), Step 2	8-hydroxynaringenin => ((2E,4E)-2,4-dihydroxy-4-[6-(4-hydroxyphenyl)-2,4-dioxodihydro-2H-pyran-3(4H)-ylidene]but-2-enoic acid)	True	0
+D00007	LSD;Iignostilbene-α,β-dioxygenase	Polyphenols;Stilbenes;Stilbenes;Resveratrol	Stilbene degradation (oxic), Step 1	resveratrol => 3,5-dihydroxybenzaldehyde + 4-hydroxybenzaldehyde	True	0
+D00014,K22432	CarE;electron transfer flavoprotein B	Polyphenols;Phenolic_acids;Hydroxycinnamic_acids;Caffeic_Acid	caffeate reduction, Subunit E	caffeate electron transfer	True	0
+D00015,K22431	CarD;electron transfer flavoprotein A	Polyphenols;Phenolic_acids;Hydroxycinnamic_acids;Caffeic_Acid	caffeate reduction, Subunit D	caffeate electron transfer	True	0
+D00016,K22430	CarC;caffeyl-CoA reductase 	Polyphenols;Phenolic_acids;Hydroxycinnamic_acids;Caffeic_Acid	caffeate reduction, Subunit C	caffeyl-coA => hydrocaffeyl-coA	True	0
+D00017	CarB;caffeyl-CoA synthetase 	Polyphenols;Phenolic_acids;Hydroxycinnamic_acids;Caffeic_Acid	caffeate reduction, Subunit B	caffeate => caffeyl-coenzyme A	True	1
+D00018	CarA;hydrocaffeyl-CoA:caffeate CoA transferase	Polyphenols;Phenolic_acids;Hydroxycinnamic_acids;Caffeic_Acid	caffeate reduction, Subunit A	hydrocaffeyl-coA => caffeyl-coA + hydrocaffeate	True	0
+D00020,EC:1.97.1.2	pgthA;pyrogallol-phloroglucinol transhydroxylase subunit A	Polyphenols;Other_polyphenols;Other_polyphenols;Pyrogallol	pyrogallol degradation (anoxic), Subunit A	pyrogallol + 1,2,3,5-tetrahydroxybenzene => phloroglucinol + 1,2,3,5-tetrahydroxybenzene	True	0
+D00021	pgthB;pyrogallol-phloroglucinol transhydroxylase subunit B	Polyphenols;Other_polyphenols;Other_polyphenols;Pyrogallol	pyrogallol degradation (anoxic), Subunit B	pyrogallol + 1,2,3,5-tetrahydroxybenzene => phloroglucinol + 1,2,3,5-tetrahydroxybenzene	True	0
+D00023,EC:1.3.1.57	PGR;phloroglucinol reductase	Polyphenols;Other_polyphenols;Other_polyphenols;Phloroglucinol	phloroglucinol degradation (anoxic), Step 1	phloroglucinol => dihydrophloroglucinol	True	0
+D00024	EhyA;eugenol hydroxylase subunit A	Polyphenols;Other_polyphenols;Hydroxyphenylpropenes;Eugenol	eugenol degradation (oxic); Step 1 Subunit A	eugenol => coniferyl alcohol	True	0
+D00025	EhyB;eugenol hydroxylase subunit B	Polyphenols;Other_polyphenols;Hydroxyphenylpropenes;Eugenol	eugenol degradation (oxic); Step 1 Subunit B	eugenol => coniferyl alcohol	True	0
+D00026,EC:1.1.1.194	CalA;coniferyl alcohol dehydrogenase	Polyphenols;Other_polyphenols;Methoxyphenols;Coniferyl_alcohol	eugenol degradation (oxic); Step 2	coniferyl alcohol => coniferyl aldehyde	True	0
+D00037	CalB;coniferyl aldehyde dehydrogenase	Polyphenols;Other_polyphenols;Methoxyphenols;Coniferyl_aldehyde	eugenol degradation (oxic); Step 3	coniferyl aldehyde => ferulic acid	True	0
+D00038,K12508,EC:6.2.1.34	FCS;feruloyl-CoA synthetase	Polyphenols;Phenolic_acids;Hydroxycinnamic_acids;Ferulic_acid	eugenol degradation (oxic); Step 4	ferulic acid => feruloyl-coA	True	0
+D00027,EC:1.13.11.88,K23363	IEM;isoeugenol monooxygenase	Polyphenols;Other_polyphenols;Hydroxyphenylpropenes;Isoeugenol	isoeugenol degradation (oxic), Step 1	isoeugenol => vanillin	True	0
+D00028	PhcC;(+)-dehydrodiconiferyl acid dehydrogenase	Polyphenols;Lignans;Lignans;Dehydroconiferyl_alcohol	dehydroconiferyl alcohol degradation, Step 1 enzyme (+)	DCA-C => DCA-CL => DCA-CC	True	0
+D00029	PhcD;(-)-dehydrodiconiferyl acid dehydrogenase/hydroxylase	Polyphenols;Lignans;Lignans;Dehydroconiferyl_alcohol	dehydroconiferyl alcohol degradation, Step 1 enzyme (-)	DCA-C => DCA-CL => DCA-CC	True	0
+D00030	PhcF;(+)-DCA-CC decarboxylase	Polyphenols;Lignans;Lignans;Dehydroconiferyl_alcohol	dehydroconiferyl alcohol degradation, Step 2 enzyme (+)	DCA-CC => DCA-S	True	0
+D00031	PhcG;(-)-DCA-CC decarboxylase	Polyphenols;Lignans;Lignans;Dehydroconiferyl_alcohol	dehydroconiferyl alcohol degradation, Step 2 enzyme (-)	DCA-CC => DCA-S	True	0
+D00007	LSD;Iignostilbene-α,β-dioxygenase	Polyphenols;Lignans;Lignans;Dehydroconiferyl_alcohol	dehydroconiferyl alcohol degradation, Step 3	DCA-S => 5-formylferulate + vanillin	True	0
+D00039	sam5;flavonoid hydroxylase	Polyphenols;Flavonoids;Isoflavonoids;	isoflavonoid hydroxylation (oxic)	isoflavones => hydroxyisoflavones	True	0
+D00039	sam5;flavonoid hydroxylase	Polyphenols;Flavonoids;Flavanones;	flavanone hydroxylation (oxic)	flavanones => hydroxyflavanones	True	0
+D00039	sam5;flavonoid hydroxylase	Polyphenols;Flavonoids;Flavones;	flavone hydroxylation (oxic)	flavones => hydroxyflavones	True	0
+D00041	GRAD;γ-resorcylic acid decarboxylase,EC:4.1.1.103	Polyphenols;Phenolic acids;Hydroxybenzoic acids;	resorcinol degradation	gamma-resorcylate => resorcinol	True	0
+K15760,EC:1.14.13.236	toluene monooxygenase system protein A [EC:1.14.13.236 1.14.13.-] [RN:R02550 R03562 R05666]	Aromatic	Toluene degradation (oxic), step 1 route 1 subunit A	Toluene => Benzyl alcohol	True	0
+K15761	toluene monooxygenase system protein B [EC:1.14.13.236 1.14.13.-]. [RN:R02550 R03562 R05666]	Aromatic	Toluene degradation (oxic), step 1 route 1 subunit B	Toluene => Benzyl alcohol	True	0
+K15762	toluene monooxygenase system ferredoxin subunit [RN:R02550 R03562 R05666 R09513]	Aromatic	Toluene degradation (oxic), step 1 route 1 subunit C	Toluene => Benzyl alcohol	True	0
+K15763	toluene monooxygenase system protein D [EC:1.14.13.236 1.14.13.-] [RN:R02550 R03562 R05666]	Aromatic	Toluene degradation (oxic), step 1 route 1 subunit D	Toluene => Benzyl alcohol	True	0
+K15764	toluene monooxygenase system protein E [EC:1.14.13.236 1.14.13.-] [RN:R02550 R03562 R05666]	Aromatic	Toluene degradation (oxic), step 1 route 1 subunit E	Toluene => Benzyl alcohol	True	0
+K15765	toluene monooxygenase electron transfer component [EC:1.18.1.3] [RN:R02550 R03562 R05666 R09513]	Aromatic	Toluene degradation (oxic), step 1 route 1 subunit F	Toluene => Benzyl alcohol	True	0
+K15757, EC:1.14.15.26	toluene methyl-monooxygenase [EC:1.14.15.26] [RN:R02550 R05288 R05442 R05443]	Aromatic	Toluene degradation (oxic), step 1 route 2 subunit A	Toluene => Benzyl alcohol	True	0
+K15758	toluene methyl-monooxygenase electron transfer component [EC:1.18.1.3] [RN:R02550 R05288 R05442 R05443]	Aromatic	Toluene degradation (oxic), step 1 route 2 subunit B	Toluene => Benzyl alcohol	True	0
+K00055, EC:1.1.1.90,AA3_2	aryl-alcohol dehydrogenase [EC:1.1.1.90] [RN:R01763 R02611 R04304 R05282 R05347 R05348]	Aromatic	Toluene degradation (oxic), step 2 	Benzyl alcohol => Benzaldehyde	True	0
+K00141, EC:1.2.1.28	benzaldehyde dehydrogenase (NAD) [EC:1.2.1.28] [RN:R01293 R01419 R05289 R05663 R05664 R07667	Aromatic	Toluene degradation (oxic), step 3	Benzaldehyde => Benzoate	True	0
+K05549, EC:1.14.12.10	benzoate/toluate 1,2-dioxygenase subunit alpha [EC:1.14.12.10 1.14.12.-] [RN:R05290 R05291 R05428 R05621 R05622 R05665 R08100 R08101 R08108 R08109 R08110]	Aromatic	Benzoate degradation to catechol (oxic), step 1 subunit A	Benzoate => cis-1,2-Dihydroxycyclohexa-3,5-diene-1-carboxylate	True	0
+K05550	benzoate/toluate 1,2-dioxygenase subunit beta [EC:1.14.12.10 1.14.12.-] [RN:R05290 R05291 R05428 R05621 R05622 R05665 R08100 R08101 R08108 R08109 R08110]	Aromatic	Benzoate degradation to catechol (oxic), step 1 subunit B	Benzoate => cis-1,2-Dihydroxycyclohexa-3,5-diene-1-carboxylate	True	0
+K05784	benzoate/toluate 1,2-dioxygenasreductase component [EC:1.18.1.-]	Aromatic	Benzoate degradation degradation to catechol (oxic), step 1 subunit C	Benzoate => cis-1,2-Dihydroxycyclohexa-3,5-diene-1-carboxylate	True	0
+K05783, EC:1.3.1.25	dihydroxycyclohexadiene carboxylate dehydrogenase [EC:1.3.1.25 1.3.1.-]	Aromatic	Benzoate degradation degradation to catechol  (oxic), step 2	cis-1,2-Dihydroxycyclohexa-3,5-diene-1-carboxylate => Catechol	True	0
+K03381, EC:1.13.11.1	catechol 1,2-dioxygenase [EC:1.13.11.1]	Polyphenols;Other polyphenols;Other polyphenols;Catechol	catechol ortho-cleavage (oxic), Step 1	Catechol => cis,cis-Muconate	True	0
+K01856, EC:5.5.1.1	muconate cycloisomerase [EC:5.5.1.1]	downstrream	catechol ortho-cleavage (oxic), Step 2	cis,cis-Muconate => (+)-Muconolactone	True	0
+K03464, EC:5.3.3.4	muconolactone D-isomerase [EC:5.3.3.4]	downstrream	catechol ortho-cleavage (oxic), Step 3	(+)-Muconolactone => 3-Oxoadipate enol-lactone	True	0
+K01055, EC:3.1.1.24	3-oxoadipate enol-lactonase [EC:3.1.1.24]	downstrream	catechol ortho-cleavage (oxic), Step 4	3-Oxoadipate enol-lactone => 3-Oxoadipate	True	0
+K18074, EC:1.14.12.15	terephthalate 1,2-dioxygenase oxygenase component alpha subunit [EC:1.14.12.15]	Aromatic	terephalate => 3,4-dihydroxybenzoate (oxic), step 1 subunit A	Terephalate => cis-4,5-Dihydroxycyclohexa-1(6),2-diene-1,4-dicarboxylate	True	0
+K18075	terephthalate 1,2-dioxygenase oxygenase component beta subunit [EC:1.14.12.15]	Aromatic	terephalate => 3,4-dihydroxybenzoate (oxic), step 1 subunit B	Terephalate => cis-4,5-Dihydroxycyclohexa-1(6),2-diene-1,4-dicarboxylate	True	0
+K18076,EC:1.3.1.53	1,2-dihydroxy-3,5-cyclohexadiene-1,4-dicarboxylate dehydrogenase [EC:1.3.1.53]	Aromatic	terephalate => 3,4-dihydroxybenzoate (oxic), step 2	cis-4,5-Dihydroxycyclohexa-1(6),2-diene-1,4-dicarboxylate => 3,4-Dihydroxybenzoate	True	0
