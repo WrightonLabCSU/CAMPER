@@ -5,7 +5,7 @@ import pandas as pd
 import networkx as nx
 import altair as alt
 
-from camper_dramkit.camper_distill import fill_genome_summary_frame, summarize_rrnas, summarize_trnas, build_module_net, get_module_step_coverage, make_module_coverage_df, make_module_coverage_frame, make_module_coverage_heatmap, pairwise, first_open_paren_is_all, split_into_steps, is_ko, make_module_network, get_module_coverage, make_etc_coverage_df, make_etc_coverage_heatmap, make_functional_df, make_functional_heatmap, fill_liquor_dfs, make_liquor_heatmap, make_liquor_df, make_genome_summary, write_summarized_genomes_to_xlsx, get_phylum_and_most_specific
+from camper_dramkit.camper_distill import fill_genome_summary_frame, build_module_net, get_module_step_coverage, make_module_coverage_df, make_module_coverage_frame, make_module_coverage_heatmap, pairwise, first_open_paren_is_all, split_into_steps, is_ko, make_module_network, get_module_coverage, make_etc_coverage_df, make_etc_coverage_heatmap, make_functional_df, make_functional_heatmap, fill_liquor_dfs, make_liquor_heatmap, make_liquor_df, make_genome_summary, write_summarized_genomes_to_xlsx, get_phylum_and_most_specific
 
 
 
@@ -34,19 +34,6 @@ def summarized_genomes():
 def test_fill_genome_summary_frame(annotations, genome_summary_frame, summarized_genomes):
     test_frame = fill_genome_summary_frame(annotations, genome_summary_frame, 'fasta')
     pd.testing.assert_frame_equal(test_frame, summarized_genomes)
-
-
-def test_summarize_rrnas():
-    fake_rrnas = pd.DataFrame([['fake_NC_001422.1', 990, 1000, 101.0, '+', '16S rRNA', pd.np.NaN]],
-                              columns=['scaffold', 'begin', 'end', 'e-value', 'strand', 'type', 'note'])
-    test_rrna_frame = summarize_rrnas(fake_rrnas, 'scaffold')
-    print(test_rrna_frame)
-    real_rrna_frame = pd.DataFrame([['5S rRNA', '5S ribosomal RNA gene', 'rRNA', 'rRNA', '', '', 0],
-                                    ['16S rRNA', '16S ribosomal RNA gene', 'rRNA', 'rRNA', '', '', 1],
-                                    ['23S rRNA', '23S ribosomal RNA gene', 'rRNA', 'rRNA', '', '', 0]],
-                                   columns=['gene_id', 'gene_description', 'module', 'sheet', 'header', 'subheader',
-                                            'fake_NC_001422.1'])
-    pd.testing.assert_frame_equal(test_rrna_frame, real_rrna_frame)
 
 
 @pytest.fixture()

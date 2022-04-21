@@ -15,7 +15,7 @@ from skbio.io import read as read_sequence
 from camper_dramkit.camper_annotate import filter_fasta, run_prodigal, get_best_hits, \
     get_reciprocal_best_hits, process_reciprocal_best_hits, get_kegg_description, get_uniref_description, \
     get_basic_description, get_peptidase_description, get_sig_row, get_gene_data, get_unannotated, \
-    count_motifs, strip_endings, process_custom, \
+    count_motifs, strip_endings, process_camper, \
     parse_hmmsearch_domtblout, \
     camper_hmmscan_formater, make_mmseqs_db, camper_blast_search_formater
 
@@ -27,45 +27,44 @@ def prodigal_dir(fasta_loc, tmpdir):
     gff, fna, faa = run_prodigal(fasta_loc, str(prodigal_output))
     return gff, fna, faa
 
-
 @pytest.fixture()
 def fasta_loc():
-    return os.path.join('test_data', 'NC_001422.fasta')
+    return os.path.join('tests', 'test_data', 'NC_001422.fasta')
 
 
 def test_camper_hmmscan_formater():
     hits = pd.read_csv(
-        'test_data/test_camper_hmmscan_formater_hits.csv', 
+        'tests/test_data/test_camper_hmmscan_formater_hits.csv', 
         index_col=0)
     received = camper_hmmscan_formater(
         hits=hits, db_name='CAMPER', 
-        hmm_info_path="test_data/test_camper_hmmscan_formater_scores.tsv", 
+        hmm_info_path="tests/test_data/test_camper_hmmscan_formater_scores.tsv", 
         top_hit=False)
     expected = pd.read_csv(
-        './test_data/test_camper_hmmscan_formater_out_notop_hit.csv',
+        'tests/test_data/test_camper_hmmscan_formater_out_notop_hit.csv',
         index_col=0)
     assert received.equals(expected), "Something wrong with camper hmm"
     received = camper_hmmscan_formater(
         hits=hits, db_name='CAMPER', 
-        hmm_info_path="test_data/test_camper_hmmscan_formater_scores.tsv", 
+        hmm_info_path="tests/test_data/test_camper_hmmscan_formater_scores.tsv", 
         top_hit=True)
     expected = pd.read_csv(
-        './test_data/test_camper_hmmscan_formater_out.csv',
+        'tests/test_data/test_camper_hmmscan_formater_out.csv',
         index_col=0)
     assert received.equals(expected), "Something wrong with camper hmm"
 
 
 def test_camper_blast_search_formater():
     received = camper_blast_search_formater(
-        hits_path='test_data/test_camper_blast_search_formater_hits.tsv',
+        hits_path='tests/test_data/test_camper_blast_search_formater_hits.tsv',
         db_name='CAMPER', 
         info_db = pd.read_csv(
-            './test_data/test_camper_blast_search_formater_scores.tsv', 
+            './tests/test_data/test_camper_blast_search_formater_scores.tsv', 
             sep='\t', 
             index_col=0) ,
         start_time = datetime.now())
     expected = pd.read_csv(
-         './test_data/test_camper_blast_search_formater_out.csv',
+         './tests/test_data/test_camper_blast_search_formater_out.csv',
          index_col=0)
     assert received.equals(expected), "Something wrong with camper blast search"
 
@@ -106,7 +105,7 @@ def mmseqs_db(prodigal_faa, mmseqs_db_dir):
 
 @pytest.fixture()
 def phix_proteins():
-    return os.path.join('test_data', 'NC_001422.faa')
+    return os.path.join('tests', 'test_data', 'NC_001422.faa')
 
 
 @pytest.fixture()
@@ -139,8 +138,8 @@ def test_get_reciprocal_best_hits(reverse_best_hits_loc):
 
 @pytest.fixture()
 def processed_hits():
-    forward = os.path.join('test_data', 'query_target_hits.b6')
-    reverse = os.path.join('test_data', 'target_query_hits.b6')
+    forward = os.path.join('tests', 'test_data', 'query_target_hits.b6')
+    reverse = os.path.join('tests', 'test_data', 'target_query_hits.b6')
     processed_hits = process_reciprocal_best_hits(forward, reverse)
     return processed_hits
 
@@ -280,36 +279,6 @@ def test_get_unannotated(phix_proteins):
     assert set(unannotated_genes) == set(test_unannotated_genes)
 
 
-def test_assign_grades():
-    annotations_data = [[True, 'K00001', False, 'KOER09234OK', ['PF00001']],
-                        [False, 'K00002', True, 'KLODKJFSO234KL', ['PF01234']],
-                        [False, 'K00003', False, 'EIORWU234KLKDS', pd.np.NaN],
-                        [False, pd.np.NaN, False, pd.np.NaN, pd.np.NaN],
-                        [False, pd.np.NaN, False, pd.np.NaN, ['PF01235']]]
-    annotations = pd.DataFrame(annotations_data, index=['gene1', 'gene2', 'gene3', 'gene4', 'gene5'],
-                               columns=['kegg_RBH', 'kegg_hit', 'uniref_RBH', 'uniref_hit', 'pfam_hits'])
-    test_grades = assign_grades(annotations)
-    assert test_grades.loc['gene1', 'rank'] == 'A'
-    assert test_grades.loc['gene2', 'rank'] == 'B'
-    assert test_grades.loc['gene3', 'rank'] == 'C'
-    assert test_grades.loc['gene4', 'rank'] == 'E'
-    assert test_grades.loc['gene5', 'rank'] == 'D'
-    # test no uniref
-    annotations_data2 = [[True, 'K00001', ['PF00001']],
-                         [False, 'K00002', ['PF01234']],
-                         [False, 'K00003', pd.np.NaN],
-                         [False, pd.np.NaN, pd.np.NaN],
-                         [False, pd.np.NaN, ['PF01235']]]
-    annotations2 = pd.DataFrame(annotations_data2, index=['gene1', 'gene2', 'gene3', 'gene4', 'gene5'],
-                                columns=['kegg_RBH', 'kegg_hit', 'pfam_hits'])
-    test_grades2 = assign_grades(annotations2)
-    assert test_grades2.loc['gene1', 'rank'] == 'A'
-    assert test_grades2.loc['gene2', 'rank'] == 'C'
-    assert test_grades2.loc['gene3', 'rank'] == 'C'
-    assert test_grades2.loc['gene4', 'rank'] == 'E'
-    assert test_grades2.loc['gene5', 'rank'] == 'D'
-
-
 @pytest.fixture()
 def phix_annotations():
     return pd.DataFrame([['A', 'K1', 'U1', None, 'a_bug1'],
@@ -352,7 +321,7 @@ def test_strip_endings():
 
 
 def test_parse_hmmsearch_domtblout():
-    parsed_hit = parse_hmmsearch_domtblout(os.path.join('test_data', 'hmmsearch_hit.txt'))
+    parsed_hit = parse_hmmsearch_domtblout(os.path.join('tests', 'test_data', 'hmmsearch_hit.txt'))
     assert parsed_hit.shape == (1, 23)
     assert parsed_hit.loc[0, 'query_id'] == 'NP_040710.1'
     assert parsed_hit.loc[0, 'query_length'] == 38

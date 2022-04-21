@@ -586,11 +586,6 @@ def merge_in_new_annotations(new_annotations:pd.DataFrame, past_annotations:pd.D
 #               help='Annotate these fastas against UniRef, drastically increases run time and '
 #                    'memory requirements')
 @click.option('--keep_tmp_dir', default=False)
-@click.option('--make_new_faa', default=None,
-              help="If true the output directory will have a new genes.faa file with the"
-              " anotation information apended to the headers. If false this file will not"
-              " be made and time will be saved. If not specified the value will be set"
-              " based on other arguments.")
 @click.option('--threads', type=int, default=10, help='number of processors to use')
 def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_score_threshold=350,
                    past_annotations_path:str=None, 
@@ -599,17 +594,11 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
                    camper_hmm_loc=(DEFAULT_CUSTOM_HMM_LOC),
                    camper_hmm_cutoffs_loc=(DEFAULT_CUSTOM_HMM_CUTOFFS_LOC), 
                    use_uniref=False, use_vogdb=False, kofam_use_dbcan2_thresholds=False, 
-                   rename_genes=True, keep_tmp_dir=True, threads=10, verbose=True, 
-                   make_new_faa:bool=None):
+                   rename_genes=True, keep_tmp_dir=True, threads=10, verbose=True):
     fasta_locs = glob(input_faa)
     if len(fasta_locs) == 0:
         raise ValueError('Given fasta locations returns no paths: %s' % input_faa)
     print('%s fastas found' % len(fasta_locs))
-    if make_new_faa is None:
-        # We only make a new faa if the user asks or
-        # we are not apending to a past annotatons
-        make_new_faa = past_annotations_path is None
-
     # set up
     start_time = datetime.now()
     print('%s: Annotation started' % str(datetime.now()))
@@ -654,11 +643,6 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
                          kofam_use_dbcan2_thresholds,
                          threads, verbose)
                        ], axis=1)
-
-        if make_new_faa:
-           annotated_faa = path.join(fasta_dir, 'genes.faa')
-           create_annotated_fasta(fasta_loc, annotations, annotated_faa, name=fasta_name)
-           faa_locs.append(annotated_faa)
 
         # add fasta name to frame and index, write file
         annotations.insert(0, 'fasta', fasta_name)
