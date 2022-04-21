@@ -37,8 +37,8 @@ setup(
     install_requires=['pandas', 'altair', 'sqlalchemy', 'networkx', 'openpyxl', 'numpy', 'click'],
     entry_points={
         'console_scripts': [
-            'camper_distill = camper_dramkit.camper_distill:summarize_genomes',
-            'camper_annotate = camper_dramkit.camper_annotate:annotate_genes',
+            'camper_distill = camper_dramkit.camper_distill:summarize_genomes_cmd',
+            'camper_annotate = camper_dramkit.camper_annotate:annotate_genes_cmd',
             'combine_annotations_lowmem = camper_dramkit.combine_annotations_lowmem:append_annotations_lowmem'
         ],
     },

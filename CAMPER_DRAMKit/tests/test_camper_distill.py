@@ -5,9 +5,33 @@ import pandas as pd
 import networkx as nx
 import altair as alt
 
-from camper_dramkit.camper_distill import fill_genome_summary_frame, build_module_net, get_module_step_coverage, make_module_coverage_df, make_module_coverage_frame, make_module_coverage_heatmap, pairwise, first_open_paren_is_all, split_into_steps, is_ko, make_module_network, get_module_coverage, make_etc_coverage_df, make_etc_coverage_heatmap, make_functional_df, make_functional_heatmap, fill_liquor_dfs, make_liquor_heatmap, make_liquor_df, make_genome_summary, write_summarized_genomes_to_xlsx, get_phylum_and_most_specific
+from camper_dramkit.camper_distill import fill_genome_summary_frame, build_module_net, \
+    get_module_step_coverage, make_module_coverage_df, make_module_coverage_frame, \
+    make_module_coverage_heatmap, pairwise, first_open_paren_is_all, split_into_steps, \
+    is_ko, make_module_network, get_module_coverage, make_etc_coverage_df, \
+    make_etc_coverage_heatmap, make_functional_df, make_functional_heatmap, \
+    fill_liquor_dfs, make_liquor_heatmap, make_liquor_df, make_genome_summary, \
+    write_summarized_genomes_to_xlsx, get_phylum_and_most_specific, summarize_genomes, \
+    DEFAULT_CAMPER_DIST
 
+ALT_CAMPER_DIST = os.path.join(os.path.dirname(__file__) , "../", "CAMPER_distillate.tsv")
 
+def test_summarize_genomes(tmpdir):
+    tmp_out = tmpdir.mkdir('dist_genes')
+    camper_distillate = DEFAULT_CAMPER_DIST \
+        if os.path.exists(DEFAULT_CAMPER_DIST) else ALT_CAMPER_DIST
+    annotations = os.path.join('tests', 'test_data', 'camper_test_annotations_one.tsv')
+    output_tsv = os.path.join(tmp_out, 'annotations.tsv')
+    summarize_genomes(annotations=annotations, output_tsv=output_tsv, 
+                      groupby_column='fasta', 
+                      camper_distillate=camper_distillate)
+    assert (
+        pd.read_csv(output_tsv, 
+                    sep='\t', index_col=0)
+        .equals(
+            pd.read_csv(os.path.join('tests', 'test_data', 'camper_test_distillate.tsv'), 
+                        sep='\t', index_col=0)))
+        
 
 @pytest.fixture()
 def annotations():

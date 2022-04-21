@@ -22,8 +22,6 @@ DEFAULT_CUSTOM_HMM_LOC = os.path.join(os.path.dirname(__file__), "data", "CAMPER
 DEFAULT_CUSTOM_HMM_CUTOFFS_LOC = os.path.join(os.path.dirname(__file__), "data", "CAMPER_hmm_scores.tsv")
 DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC = os.path.join(os.path.dirname(__file__), "data", "CAMPER_blast_scores.tsv")
 
-MAG_DBS_TO_ANNOTATE = ('kegg', 'kofam', 'kofam_ko_list', 'uniref', 
-                       'peptidase', 'pfam', 'dbcan', 'vogdb')
 BOUTFMT6_COLUMNS = ['qId', 'tId', 'seqIdentity', 'alnLen', 'mismatchCnt',
                     'gapOpenCnt', 'qStart', 'qEnd', 'tStart', 'tEnd', 'eVal',
                     'bitScore']
@@ -372,6 +370,10 @@ def rank_per_row(row):
 #TODO decide if we need use_hmmer_thresholds:bool=False
 def camper_hmmscan_formater(hits:pd.DataFrame,  db_name:str, 
                              hmm_info_path:str, top_hit:bool=True):
+    if len(hits) < 1:
+        return pd.DataFrame(columns = [
+            f"{db_name}_id", f"{db_name}_rank", f"{db_name}_bitScore", 
+            f"{db_name}_hits", f"{db_name}_search_type"])
     if hmm_info_path is None:
         hmm_info = None
         hits = hits[hits.apply(get_sig_row, axis=1)]
@@ -486,7 +488,7 @@ def annotate_orf(gene_faa:str, tmp_dir:str, start_time,
                  custom_hmm_cutoffs_locs=(), 
                  custom_fa_db_cutoffs_locs=(), 
                  bit_score_threshold=60, rbh_bit_score_threshold=350,
-                 kofam_use_dbcan2_thresholds=False, threads=10, verbose=False):
+                 threads=10, verbose=False):
 
     # Return a base dataframe so all genes are present
     yield pd.DataFrame( index=[seq.metadata['id'] for seq in read_sequence(gene_faa, format='fasta')])
@@ -561,39 +563,14 @@ def merge_in_new_annotations(new_annotations:pd.DataFrame, past_annotations:pd.D
                          " be merged to.")
     new_annotations = pd.merge(past_annotations, new_annotations, how="left", left_index=True, right_index=True)
 
-@click.command("annotate_genes")
-@click.option('-i', '--input_faa', help="fasta file, optionally with wildcards to point to "
-                                   "individual MAGs", required=True)
-@click.option('-o', '--output_dir', help="output directory", required=True)
-@click.option('-a', '--past_annotations_path',
-              help="past_annotations to append new annotations to.")
-@click.option('--bit_score_threshold', type=int, default=60,
-         help='minimum bitScore of search to retain hits')
-@click.option('--rbh_bit_score_threshold', type=int, default=350,
-         help='minimum bitScore of reverse best hits to retain hits')
-@click.option('--kofam_use_dbcan2_thresholds', default=False,
-         help='Use dbcan2 suggested HMM cutoffs for KOfam annotation instead of KOfam '
-              'recommended cutoffs. This will be ignored if annotating with KEGG Genes.')
-@click.option('--camper_fa_db_loc', default=[DEFAULT_CUSTOM_FA_DB_LOC], multiple=True,
-         help="Location of CAMPER fastas to annotate against")
-@click.option('--camper_fa_db_cutoffs_loc', default=[DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC], multiple=True,
-              help="Location of file with camper fasta cutoffs and descriptions")
-@click.option('--camper_hmm_loc',   default=[DEFAULT_CUSTOM_HMM_LOC], multiple=True,
-              help="Location of camper hmms to annotate against")
-@click.option('--camper_hmm_cutoffs_loc', default=[DEFAULT_CUSTOM_HMM_CUTOFFS_LOC], multiple=True,
-              help="Location of file with CAMPER HMM cutoffs and descriptions")
-# @click.option('--use_uniref', default=False,
-#               help='Annotate these fastas against UniRef, drastically increases run time and '
-#                    'memory requirements')
-@click.option('--keep_tmp_dir', default=False)
-@click.option('--threads', type=int, default=10, help='number of processors to use')
+
 def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_score_threshold=350,
                    past_annotations_path:str=None, 
                    camper_fa_db_loc=(DEFAULT_CUSTOM_FA_DB_LOC), 
                    camper_fa_db_cutoffs_loc=(DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC,), 
                    camper_hmm_loc=(DEFAULT_CUSTOM_HMM_LOC),
                    camper_hmm_cutoffs_loc=(DEFAULT_CUSTOM_HMM_CUTOFFS_LOC), 
-                   use_uniref=False, use_vogdb=False, kofam_use_dbcan2_thresholds=False, 
+                   use_uniref=False, use_vogdb=False, 
                    rename_genes=True, keep_tmp_dir=True, threads=10, verbose=True):
     fasta_locs = glob(input_faa)
     if len(fasta_locs) == 0:
@@ -640,7 +617,6 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
                          start_time, camper_locs,
                          camper_hmm_cutoffs_locs, camper_fa_db_cutoffs_locs, 
                          bit_score_threshold, rbh_bit_score_threshold, 
-                         kofam_use_dbcan2_thresholds,
                          threads, verbose)
                        ], axis=1)
 
@@ -670,9 +646,54 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
     print("%s: Completed annotations" % str(datetime.now() - start_time))
 
 
+@click.command("annotate_genes")
+@click.option('-i', '--input_faa', help="fasta file, optionally with wildcards to point to "
+                                   "individual MAGs", required=True)
+@click.option('-o', '--output_dir', help="output directory", required=True)
+@click.option('-a', '--past_annotations_path',
+              help="past_annotations to append new annotations to.")
+# @click.option('--bit_score_threshold', type=int, default=60,
+#          help='minimum bitScore of search to retain hits')
+# @click.option('--rbh_bit_score_threshold', type=int, default=350,
+#          help='minimum bitScore of reverse best hits to retain hits')
+@click.option('--camper_fa_db_loc', default=[DEFAULT_CUSTOM_FA_DB_LOC], multiple=True,
+         help="Location of CAMPER fastas to annotate against")
+@click.option('--camper_fa_db_cutoffs_loc', default=[DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC], multiple=True,
+              help="Location of file with camper fasta cutoffs and descriptions")
+@click.option('--camper_hmm_loc',   default=[DEFAULT_CUSTOM_HMM_LOC], multiple=True,
+              help="Location of camper hmms to annotate against")
+@click.option('--camper_hmm_cutoffs_loc', default=[DEFAULT_CUSTOM_HMM_CUTOFFS_LOC], multiple=True,
+              help="Location of file with CAMPER HMM cutoffs and descriptions")
+# @click.option('--use_uniref', default=False,
+#               help='Annotate these fastas against UniRef, drastically increases run time and '
+#                    'memory requirements')
+@click.option('--keep_tmp_dir', default=False)
+@click.option('--threads', type=int, default=10, help='number of processors to use')
+def annotate_genes_cmd(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_score_threshold=350,
+                   past_annotations_path:str=None, 
+                   camper_fa_db_loc=(DEFAULT_CUSTOM_FA_DB_LOC), 
+                   camper_fa_db_cutoffs_loc=(DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC,), 
+                   camper_hmm_loc=(DEFAULT_CUSTOM_HMM_LOC),
+                   camper_hmm_cutoffs_loc=(DEFAULT_CUSTOM_HMM_CUTOFFS_LOC), 
+                   use_uniref=False, use_vogdb=False, 
+                   rename_genes=True, keep_tmp_dir=True, threads=10, verbose=True):
+    annotate_genes(
+        input_faa=input_faa,
+        output_dir=output_dir,
+        bit_score_threshold=bit_score_threshold,
+        rbh_bit_score_threshold=rbh_bit_score_threshold,
+        past_annotations_path=past_annotations_path,
+        camper_fa_db_loc=camper_fa_db_loc,
+        camper_fa_db_cutoffs_loc=camper_fa_db_cutoffs_loc,
+        camper_hmm_loc=camper_hmm_loc,
+        camper_hmm_cutoffs_loc=camper_hmm_cutoffs_loc,
+        use_uniref=use_uniref,
+        use_vogdb=use_vogdb,
+        rename_genes=rename_genes,
+        keep_tmp_dir=keep_tmp_dir,
+        threads=threads,
+        verbose=verbose)
+
 if __name__ == "__main__":
-    annotate_genes()
-
-
-
+    annotate_genes_cmd()
 

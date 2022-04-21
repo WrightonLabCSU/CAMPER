@@ -565,14 +565,6 @@ def make_strings_no_repeats(genome_taxa_dict):
     return labels
 
 
-@click.command()
-@click.option('-a', '--annotations', help="annotations file, from dram annotate", 
-              required=True)
-@click.option('-o', '--output_tsv', help="output tsv loctation, it can overwright!", required=True)
-@click.option('--groupby_column', type=str, default='fasta',
-              help="past_annotations to append new annotations to.")
-@click.option('--camper_distillate', default=DEFAULT_CAMPER_DIST,
-              help="CAMPER Distillate file, if not specified the default will be used")
 def summarize_genomes(annotations,  output_tsv, groupby_column='fasta',
                       camper_distillate=DEFAULT_CAMPER_DIST):
     start_time = datetime.now()
@@ -589,8 +581,23 @@ def summarize_genomes(annotations,  output_tsv, groupby_column='fasta',
 
 
 
+@click.command()
+@click.option('-a', '--annotations', help="annotations file, from dram annotate", 
+              required=True)
+@click.option('-o', '--output_tsv', help="output tsv loctation, it can overwright!", required=True)
+@click.option('--groupby_column', type=str, default='fasta',
+              help="past_annotations to append new annotations to.")
+@click.option('--camper_distillate', default=DEFAULT_CAMPER_DIST,
+              help="CAMPER Distillate file, if not specified the default will be used")
+def summarize_genomes_cmd(annotations,  output_tsv, groupby_column='fasta',
+                      camper_distillate=DEFAULT_CAMPER_DIST):
+    summarize_genomes(annotations=annotation,  
+                      output_tsv=output_tsv, 
+                      groupby_column=groupby_column,
+                      camper_distillate=camper_distillate)
+
 if __name__ == "__main__":
-    summarize_genomes()
+    summarize_genomes_cmd()
 
 """
 import os

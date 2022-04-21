@@ -8,17 +8,20 @@ from filecmp import cmp
 import time
 from shutil import copy
 
-
 import pandas as pd
 from skbio.io import read as read_sequence
 
 from camper_dramkit.camper_annotate import filter_fasta, run_prodigal, get_best_hits, \
     get_reciprocal_best_hits, process_reciprocal_best_hits, get_kegg_description, get_uniref_description, \
     get_basic_description, get_peptidase_description, get_sig_row, get_gene_data, get_unannotated, \
-    count_motifs, strip_endings, process_camper, \
-    parse_hmmsearch_domtblout, \
-    camper_hmmscan_formater, make_mmseqs_db, camper_blast_search_formater
+    count_motifs, strip_endings, process_camper, parse_hmmsearch_domtblout,  camper_hmmscan_formater, \
+    make_mmseqs_db, camper_blast_search_formater, annotate_genes, DEFAULT_CUSTOM_FA_DB_LOC, \
+    DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC, DEFAULT_CUSTOM_HMM_LOC, DEFAULT_CUSTOM_HMM_CUTOFFS_LOC
 
+ALT_CUSTOM_FA_DB_LOC = os.path.join("..", "CAMPER_blast.faa")
+ALT_CUSTOM_HMM_LOC = os.path.join("..", "CAMPER.hmm")
+ALT_CUSTOM_HMM_CUTOFFS_LOC = os.path.join("..", "CAMPER_hmm_scores.tsv")
+ALT_CUSTOM_FA_DB_CUTOFFS_LOC = os.path.join("..", "CAMPER_blast_scores.tsv")
 
 
 @pytest.fixture()
@@ -73,6 +76,48 @@ def test_camper_blast_search_formater():
 def prodigal_gff(prodigal_dir):
     return prodigal_dir[0]
 
+
+def test_annotate_genes(tmpdir):
+    tmp_out = tmpdir.mkdir('annotate_genes')
+    input_faa = os.path.join('tests', 'test_data', 'camper_test_genes.faa')
+    input_faa_empty = os.path.join('tests', 'test_data', 'camper_test_genes_empty.faa')
+    output_dir=os.path.join(tmp_out, 'annotations')
+    output_dir_empty=os.path.join(tmp_out, 'annotations_empty')
+    camper_fa_db_loc = DEFAULT_CUSTOM_FA_DB_LOC \
+        if os.path.exists(DEFAULT_CUSTOM_FA_DB_LOC) else ALT_CUSTOM_FA_DB_LOC
+    camper_fa_db_cutoffs_loc = DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC \
+        if os.path.exists(DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC) else ALT_CUSTOM_FA_DB_CUTOFFS_LOC
+    camper_hmm_loc = DEFAULT_CUSTOM_HMM_LOC \
+        if os.path.exists(DEFAULT_CUSTOM_HMM_LOC) else ALT_CUSTOM_HMM_LOC
+    camper_hmm_cutoffs_loc = DEFAULT_CUSTOM_HMM_CUTOFFS_LOC \
+        if os.path.exists(DEFAULT_CUSTOM_HMM_CUTOFFS_LOC) else ALT_CUSTOM_HMM_CUTOFFS_LOC
+    annotate_genes(input_faa=input_faa, output_dir=output_dir,
+                   camper_fa_db_loc=(camper_fa_db_loc,), 
+                   camper_fa_db_cutoffs_loc=(camper_fa_db_cutoffs_loc,), 
+                   camper_hmm_loc=(camper_hmm_loc,),
+                   camper_hmm_cutoffs_loc=(camper_hmm_cutoffs_loc,),
+                   keep_tmp_dir=False
+                   )
+    assert (
+        pd.read_csv(os.path.join(output_dir, "annotations.tsv"), 
+                    sep='\t', index_col=0)
+        .equals(
+            pd.read_csv(os.path.join('tests', 'test_data', 'camper_test_annotations.tsv'), 
+                        sep='\t', index_col=0)))
+    # TODO test if fa file is empty
+    # annotate_genes(input_faa=input_faa_empty, output_dir=output_dir_empty,
+    #                camper_fa_db_loc=(camper_fa_db_loc,), 
+    #                camper_fa_db_cutoffs_loc=(camper_fa_db_cutoffs_loc,), 
+    #                camper_hmm_loc=(camper_hmm_loc,),
+    #                camper_hmm_cutoffs_loc=(camper_hmm_cutoffs_loc,),
+    #                keep_tmp_dir=False
+    #                )
+    # assert (
+    #     pd.read_csv(os.path.join(output_dir_empty, "annotations.tsv"), 
+    #                 sep='\t', index_col=0)
+    #     .equals(
+    #         pd.read_csv(os.path.join('tests', 'test_data', 'camper_test_annotations_empty.tsv'), 
+    #                     sep='\t', index_col=0)))
 
 @pytest.fixture()
 def prodigal_fna(prodigal_dir):
