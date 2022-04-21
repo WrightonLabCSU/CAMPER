@@ -21,7 +21,7 @@ if not os.path.exists(data_folder):
     os.rename(os.path.join(here, '..', 'CAMPER_hmm_scores.tsv'),
               os.path.join(data_folder, 'CAMPER_hmm_scores.tsv'))
 
-with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(os.path.join(here, "..", 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
