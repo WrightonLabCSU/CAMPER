@@ -14,7 +14,7 @@ from camper_dramkit.camper_distill import fill_genome_summary_frame, build_modul
     write_summarized_genomes_to_xlsx, get_phylum_and_most_specific, summarize_genomes, \
     DEFAULT_CAMPER_DIST
 
-ALT_CAMPER_DIST = os.path.join(os.path.dirname(__file__) , "../", "CAMPER_distillate.tsv")
+ALT_CAMPER_DIST = os.path.join("..", "CAMPER_distillate.tsv")
 
 def test_summarize_genomes(tmpdir):
     tmp_out = tmpdir.mkdir('dist_genes')
