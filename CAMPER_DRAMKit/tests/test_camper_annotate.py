@@ -81,8 +81,8 @@ def test_annotate_genes(tmpdir):
     tmp_out = tmpdir.mkdir('annotate_genes')
     input_faa = os.path.join('tests', 'test_data', 'camper_test_genes.faa')
     input_faa_empty = os.path.join('tests', 'test_data', 'camper_test_genes_empty.faa')
-    output_dir=os.path.join(tmp_out, 'annotations')
-    output_dir_empty=os.path.join(tmp_out, 'annotations_empty')
+    output_dir = os.path.join(tmp_out, 'annotations')
+    output_dir_empty = os.path.join(tmp_out, 'annotations_empty')
     camper_fa_db_loc = DEFAULT_CUSTOM_FA_DB_LOC \
         if os.path.exists(DEFAULT_CUSTOM_FA_DB_LOC) else ALT_CUSTOM_FA_DB_LOC
     camper_fa_db_cutoffs_loc = DEFAULT_CUSTOM_FA_DB_CUTOFFS_LOC \
@@ -91,13 +91,20 @@ def test_annotate_genes(tmpdir):
         if os.path.exists(DEFAULT_CUSTOM_HMM_LOC) else ALT_CUSTOM_HMM_LOC
     camper_hmm_cutoffs_loc = DEFAULT_CUSTOM_HMM_CUTOFFS_LOC \
         if os.path.exists(DEFAULT_CUSTOM_HMM_CUTOFFS_LOC) else ALT_CUSTOM_HMM_CUTOFFS_LOC
-    annotate_genes(input_faa=input_faa, output_dir=output_dir,
-                   camper_fa_db_loc=(camper_fa_db_loc,), 
-                   camper_fa_db_cutoffs_loc=(camper_fa_db_cutoffs_loc,), 
-                   camper_hmm_loc=(camper_hmm_loc,),
-                   camper_hmm_cutoffs_loc=(camper_hmm_cutoffs_loc,),
-                   keep_tmp_dir=False
-                   )
+    os.system(f"python3 camper_dramkit/camper_annotate.py"
+              f" -i {input_faa} -o {output_dir}"
+              f" --camper_fa_db_loc {camper_fa_db_loc}"
+              f" --camper_fa_db_cutoffs_loc {camper_fa_db_cutoffs_loc}"
+              f" --camper_hmm_loc {camper_hmm_loc}"
+              f" --camper_hmm_cutoffs_loc {camper_hmm_cutoffs_loc}"
+              )
+    # annotate_genes(input_faa=input_faa, output_dir=output_dir,
+    #                camper_fa_db_loc=(camper_fa_db_loc,), 
+    #                camper_fa_db_cutoffs_loc=(camper_fa_db_cutoffs_loc,), 
+    #                camper_hmm_loc=(camper_hmm_loc,),
+    #                camper_hmm_cutoffs_loc=(camper_hmm_cutoffs_loc,),
+    #                keep_tmp_dir=False
+    #                )
     assert (
         pd.read_csv(os.path.join(output_dir, "annotations.tsv"), 
                     sep='\t', index_col=0)
