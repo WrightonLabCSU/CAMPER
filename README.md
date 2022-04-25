@@ -57,7 +57,7 @@ Provided all things have gone smoothly, you will be able to activate this enviro
 
 #### With pip
 
-If you are not able to use Conda, you can still install CAMPER_DRAMKit with pip using the command below. Note that first you will need to install manually install (scikit-bio)[http://scikit-bio.org/], and (MMseqs2)[https://github.com/soedinglab/mmseqs2], as these tools can't be installed with the other pip dependencies.
+If you are not able to use Conda, you can still install CAMPER_DRAMKit with pip using the command below. Note that first you will need to install manually install [scikit-bio](http://scikit-bio.org/), and [MMseqs2](https://github.com/soedinglab/mmseqs2), as these tools can't be installed with the other pip dependencies.
 
 ```
 pip install camper_dramkit
@@ -92,7 +92,7 @@ An unnamed index, with the gene ID from the faa file.
   - `camper_id`: Unique CAMPER ID used in the distillation step.
   - `camper_definition`: A short description of the CAMPER match in the database.
   - `camper_search_type`: Tells you if a HMM profile or blast search found this match.
-This script can also be used with a previously run dram file in order to add the CAMPER related fields above to the pre-existing annotations. See the next section for more details. If you don’t have a dream and you need to call your genes (Prodigal)[https://github.com/hyattpd/Prodigal] is the suggested tool. Note also that the gene ids may be different in the annotations file made without a DRAM annotations file to match to as the verbatim names from the faa file are used instead DRAMs formatted names.
+This script can also be used with a previously run dram file in order to add the CAMPER related fields above to the pre-existing annotations. See the next section for more details. If you don’t have a dream and you need to call your genes [Prodigal](https://github.com/hyattpd/Prodigal) is the suggested tool. Note also that the gene ids may be different in the annotations file made without a DRAM annotations file to match to as the verbatim names from the faa file are used instead DRAMs formatted names.
 
 Distillate: Once you have the annotations file, you can use `campers_distill` in order to make a mini distillate. This distillate is a single tab separated file that can be used in the same way as the metabolism summary. It provides a wealth of information like detailed gene descriptions for all CAMPER genes, and a count of hits to each gene in the CAMPER DB. The `camper_distill` script can also leverage dbCAN ids and KO ids from KOfam or KEGG in order to provide more insight into polyphenol metabolism.
 ### DRAM Combination Workflow
@@ -107,7 +107,7 @@ This will create a new set of raw annotations with CAMPER data added, in this ca
 ```
 camper_distill  -i camper_dram_output/annotations.tsv -o camper_dram_output/distillate.tsv
 ```
-If you want the full summary of dram in addition to information from CAMPER, then you can use the (DRAM custom distillate tool)[https://github.com/WrightonLabCSU/DRAM/wiki/3a.-Running-DRAM#using-custom-distillate-files] to get all the DRAM results plus CAMPER output in the metabolism summary. All you need to do is download the `CAMPER_distillate.tsv` and run the `DRAM_distill.py` script with the `--custom_distillate` specifying its location. The following 2 lines of code will do both.
+If you want the full summary of dram in addition to information from CAMPER, then you can use the [DRAM custom distillate tool](https://github.com/WrightonLabCSU/DRAM/wiki/3a.-Running-DRAM#using-custom-distillate-files) to get all the DRAM results plus CAMPER output in the metabolism summary. All you need to do is download the `CAMPER_distillate.tsv` and run the `DRAM_distill.py` script with the `--custom_distillate` specifying its location. The following 2 lines of code will do both.
  ```
 wget https://github.com/WrightonLabCSU/CAMPER/main/CAMPER_distillate.tsv
 DRAM.py distill -i camper_dram_output/annotations.tsv -o camper_dram_output/full_dram_distilate -custom_distillate CAMPER_distillate.tsv
