@@ -3,6 +3,10 @@
 
 The CAMPER software and data is currently in a testing state and needs more validations before it should be used for any publication or production task. This RELEASE is for early adopters to get a taste of what CAMPER can do and how it can be incorporated into a workflow. A official release will be available soon.
 
+# License Pending
+
+This software remains unlicensed and the Wrighton Lab reserves all rights for the time being. Contributions will be welcomed once an appropriate license or licenses can be written. This should serve as another reminder that this project is in beta.
+
 # CAMPER (BETA)
  
   A revolutionary new data set, to enable the understanding of polyphenol metabolism in its true complexity.
