@@ -8,40 +8,76 @@ The CAMPER software and data is currently in a testing state and needs more vali
 This software remains unlicensed and the Wrighton Lab reserves all rights for the time being. Contributions will be welcomed once an appropriate license or licenses can be written. This should serve as another reminder that this project is in beta.
 
 # CAMPER (BETA)
- 
-  A revolutionary new data set, to enable the understanding of polyphenol metabolism in its true complexity.
 
-<img width="741" alt="Screen Shot 2022-03-07 at 1 47 10 PM" src="https://user-images.githubusercontent.com/95941779/157345312-27679138-c32c-4e76-8923-a2c776bccbe9.png">
+<p align="center">
+  <img width="741" alt="Screen Shot 2022-03-07 at 1 47 10 PM" src="https://user-images.githubusercontent.com/95941779/157345312-27679138-c32c-4e76-8923-a2c776bccbe9.png">
+ </p>
 
+
+Table of Contents
+=================
+  * [Overview](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#overview)
+  * [Installation and Usage](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#installation)
+    * [Using CAMPER within DRAM](https://github.com/WrightonLabCSU/CAMPER#using-camper-as-part-of-dram)
+    * [Standalone CAMPER](https://github.com/WrightonLabCSU/CAMPER#camper-standalone-tool-camper_dramkit)
+    * [I just want your profiles to search on my own](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#3-i-just-want-to-run-your-blast-and-hmm-searches-on-my-own)
+  * [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs)
+
+
+# Overview
+**C**urated **A**nnotations for **M**icrobial (**P**oly)phenol **E**nzymes and **R**eactions (**CAMPER**) is a tool that annotates genes likely involved in transforming polyphenols, and provides chemical context for these transformations in a summarized form. CAMPER aims to address a blind spot in microbial metabolism. It is currently challenging to infer polyphenol metabolism from genomic data because:  
+1)	Genes encoding characterized enzymes have not been propagated into annotation databases
+3)	Genes in databases can often be involved in multiple pathways, requiring expert knowledge to get polyphenol context
+4)	Polyphenols can be transformed in many ways – oxidized, reduced, demethylated, deglycosylated, etc.
+5)	Polyphenols are a complex class of compounds  
+
+These challenges limit widespread understanding of the transformation of these compounds across environments. 
+
+To facilitate the inference of polyphenol metabolism from genomes, CAMPER includes 8 Hidden-Markov Model (HMM) profiles and 33 Basic Local Alignment Search Tool (BLAST) searches for (poly)phenol-active genes. We also provide recommended score cut-offs for searches using two ranks: a more stringent, trusted rank (A) and a more relaxed, exploratory rank (B). The development of these profiles will be described in McGivern et al (in prep). Beyond these 41 profiles, nearly 300 other annotations from other databases (KEGG, dbCAN) are included in the CAMPER summarization.
+
+CAMPER summarizes the gene annotations into 100 modules representing different polyphenol transformations. These modules are classified by the family and sub-family of polyphenols used as substrates (following [Phenol-Explorer](http://phenol-explorer.eu/compounds/classification) Ontology) and by the oxygen requirements for the genes involved. These modules can be as small as a single gene, up to a maximum of 12 genes.
+![camper_pathways_tree_for_github-01](https://user-images.githubusercontent.com/95941779/171468538-3f2cc169-2170-4612-880b-22ad11d7c9e9.png)
+**CAMPER modules are organized by substrates and oxygen requirements, and can include multiple reaction steps.**
+
+For more detailed information on the organization and outputs, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below, and for module visuals, see the [CAMPER Map](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-map).
+
+# Installation and Usage
+There are currently three ways to run CAMPER, depending on your goals.
 
 ## CAMPER DATA
-The CAMPER data set consists of 4 files, each serving a key role in enabling reproducible, intelligent annotation of gene data.
-  - CAMPER_blast.fa: A fa file of CAMPER genes used as a target in a BLAST style search provided by mmseqs search.
+The CAMPER data set consists of 5 files, each serving a key role in enabling reproducible, intelligent annotation of gene data.
+  - CAMPER_blast.fa: A fasta file of CAMPER genes used as a target in a BLAST style search provided by mmseqs search.
   - CAMPER.hmm: A HMM file used as the target in an HMM profile search provide by MMseqs profilesearch
-  - CAMPER_blast_scores.tsv: Determines minimum cut off scores for search results and quality ranks with blast style searches.
-  - CAMPER_hmm_scores.tsv: Determines minimum cut off scores for search results and quality ranks with HMM Profile searches.
-  - CAMPER_distillate.tsv: A custom distillate, for use with DRAM or with CAMPER_DRAMKit
-## Using CAMPER as part of DRAM
+  - CAMPER_blast_scores.tsv: Provides the minimum cut off scores for search results and quality ranks with BLAST style searches.
+  - CAMPER_hmm_scores.tsv: Provides the minimum cut off scores for search results and quality ranks with HMM Profile searches.
+  - CAMPER_distillate.tsv: A custom distillate, for use with DRAM or with CAMPER_DRAMKit, to summarize the annotation results.  
+  
+## 1. Using CAMPER within DRAM
 
-To facilitate the use of the CAMPER data set, we are integrating it into [DRAM](https://github.com/WrightonLabCSU/DRAM).
+**NOTE: this functionality will be available in the to-be-released DRAM1.4.0.** If you hope to run it before then, see the [With DRAM](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#installing-with-dram) section below.
+  
+  
+If your goal is to integrate CAMPER into your regular genome annotation pipeline, we recommend running it as part of [DRAM](https://github.com/WrightonLabCSU/DRAM). **You will also get the benefit of summarizing 300 annotations derived from KEGG and dbCAN databases, if you have these databases installed, in addition to the 41 CAMPER annotations.** This will provide curated annotation and summarization of polyphenol transformation genes in addition to the regular DRAM databases. 
 
-With the release of DRAM1.4.0 you will be able to use the CAMPER data set without any additional data sets simply by supplying the `--use_camper` flag using the annotate command, like so:
+There are two steps to running CAMPER in DRAM: (1) annotation and (2) summarization (distillation, in DRAM lingo).
+Supply the `--use_camper` flag during the annotation step, like so:
 
 ```
-DRAM.py annotate --use_camper -i 'my_bins/*.fa' -o annotation
+DRAM.py annotate --use_camper -i 'my_bins/*.fa' -o DRAM_wCAMPER
+DRAM.py distill -i DRAM_wCAMPER/annotations.tsv -o DRAM_wCAMPER_distilled
 ```
 
-When you run `DRAM.py distill` it should detect that CAMPER data was included, and you will find a CAMPER tab in your metabolic summary.
+The difference in outputs between this and default DRAM is that you will find CAMPER-specific columns added to the `annotations.tsv` and you will find a CAMPER tab in your `metabolism_summary.xlsx` output.
 
-If you want to use CAMPER as part of your annotation pipeline along with an older version of DRAM see the (With DRAM) section below.
+For descriptions of the output files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
 
-## CAMPER Standalone Tool: CAMPER_DRAMKit
+## 2. CAMPER Standalone Tool: CAMPER_DRAMKit
 
-In addition to the CAMPER module in DRAM, we have also created a standalone tool, named CAMPER_DRAMKit, that can be used by itself or in conjunction with older versions of DRAM. In Fact, CAMPER_DRAMKit is really a much smaller version of DRAM that follows much the same workflow as DRAM and has similar capabilities. The setup will be a bit different for each use case, so you may want to review the options before you begin. If you are wondering what this tool can do for you, you can jump to the [Usage](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#usage) section and get a better idea for how the tool works.
+If your goal is to only look at CAMPER annotations, we recommend running CAMPER_DRAMKit, a standalone tool that provides curated annotation and summarization of polyphenol transformation genes. **Unless you run with DRAM as described below and have KEGG and dbCAN databases, here you will only get the 41 custom annotations within CAMPER.** CAMPER_DRAMKit is really a smaller version of DRAM that follows much the same workflow as DRAM and has similar capabilities. There are three ways to set up the CAMPER_DRAMKit:
 
-#### Setup With Conda
+#### A. Setup with Conda
 
-If you are only interested in CAMPER, or don't want to wait for the DRAM1.4 release, you can use the standalone tool CAMPER_DRAMKit. The simplest way to get started is with Conda, using the enviroment.yaml provided in this repository.
+The simplest way to get started with the CAMPER_DRAMKit is with Conda, using the enviroment.yaml provided in this repository.
 
 CAMPER_DRAMKit comes with the latest version of CAMPER preloaded, so if all you want to do is annotate and distill called genes with CAMPER, you only need the following commands.
 
@@ -66,7 +102,7 @@ conda activate CAMPER
 
 Provided all things have gone smoothly, you will be able to activate this environment at any time and use any of the commands outlined in the Usage section below. If there are any problems, please open an issue in the GitHub repository.
 
-#### With pip
+#### B. Setup with pip
 
 If you are not able to use Conda, you can still install CAMPER_DRAMKit with pip using the command below. Note that first you will need to install manually install [scikit-bio](http://scikit-bio.org/), and [MMseqs2](https://github.com/soedinglab/mmseqs2), as these tools can't be installed with the other pip dependencies.
 
@@ -74,51 +110,35 @@ If you are not able to use Conda, you can still install CAMPER_DRAMKit with pip 
 pip install camper_dramkit
 ```
 
-#### Installing With DRAM
+#### C. Installing with DRAM
 
-If you intend to use CAMPER_DRAMKit with DRAM it may be expedient to install them in the same Conda environment. This is easy to do if you have already made a DRAM Conda environment with the [instructions in the README](https://github.com/WrightonLabCSU/DRAM) then you can add CAMPER with the following commands:
+If you intend to use CAMPER_DRAMKit with DRAM, it may be expedient to install them in the same Conda environment. This is easy to do if you have already made a DRAM Conda environment with the [instructions in the DRAM README](https://github.com/WrightonLabCSU/DRAM), then you can add CAMPER with the following commands:
 
 ```
 wget https://github.com/WrightonLabCSU/CAMPER/main/CAMPER_DRAMKit/environment.yaml
 conda env update --name DRAM -f ./environment.yaml
 ```
 
-#### Note
+Note: If you install CAMPER_DRAMKit, you will get the latest version of the CAMPER database with it. If you want more control over the database, you can override the default data with the instructions in [Other Tools and flags](https://github.com/WrightonLabCSU/CAMPER#other-tools-and-flags).
 
-If you install CAMPER_DRAMKit you will get the latest version of the CAMPER database with it. If you want more control over the database, you can override the default data with the instructions in [Other Tools and flags](https://github.com/WrightonLabCSU/CAMPER#other-tools-and-flags).
-## Usage
+### Using CAMPER_DRAMKit
 
-Once installed, CAMPER_DRAMKit will provide 3 commands, `camper_annotate`, `camper_distill` and `combine_annotations_lowmem`.  These commands along-side DRAM can enable a variety of workflows.
+Once installed, CAMPER_DRAMKit will provide three commands: `camper_annotate`, `camper_distill` and `combine_annotations_lowmem`.  These commands alongside DRAM enable a variety of workflows.
 
 ### Standalone Workflow
 
-The simplest workflow is the annotation of a single gene faa file. An example of such a workflow is shown below.
+The simplest workflow is the two-step annotation and summarization of a single amino acid fasta file. An example of such a workflow is shown below.
 
 ```
-camper_annotate -i my_genes.faa -o my_output
-camper_distill  -i my_output/annotations.tsv -o my_output/distillate.tsv
+camper_annotate -i my_genes.faa -o my_output #annotate
+camper_distill  -i my_output/annotations.tsv -o my_output/distillate.tsv #summarize
 ```
 
-These commands will make 2 files and the output folder. In the command above I named it `my_output` but you can give it any name appropriate to your project. The output folder gives a place for your files to live and provides a place for temporary files to be stored when using the annotation file. The user will be most interested in the data produced by the program, aka the raw annotations file, and the distillate.
-
-Raw annotations: The `camper_annotate` command makes the output folder and the raw annotations file within it, always named annotations.tsv. With this tab separated file we are trying to provide a consistent, thoughtful, and user-friendly version of the annotations against the CAMPER database. The annotations.tsv has the following columns.
-An unnamed index, with the gene ID from the faa file.
-  - `fasta` holding the name of the faa file itself.
-  - `camper_hits`, A longer CAMPER ID where applicable
-  - `camper_rank`, A match quality rank based on the value of the bit score. This is determined by the  .
-  - `camper_bitScore`, The bit score from the best search result.
-  - `camper_id`: Unique CAMPER ID used in the distillation step.
-  - `camper_definition`: A short description of the CAMPER match in the database.
-  - `camper_search_type`: Tells you if a HMM profile or blast search found this match.
-This script can also be used with a previously run DRAM annotations  file in order to add the CAMPER related fields, above, to the pre-existing annotations. See the next section for more details. If you don’t have DRAM and you need to call your genes [Prodigal](https://github.com/hyattpd/Prodigal) is the suggested tool.
-
-Note also that the gene ids may be slightly different in the annotations file made without a DRAM annotations file to match to, as the verbatim names from the faa file are used instead DRAMs formatted names.
-
-Distillate: Once you have the annotations file, you can use `camper_distill` in order to make a mini distillate. This distillate is a single tab separated file that can be used in the same way as the metabolism summary. It provides a wealth of information like detailed gene descriptions for all CAMPER genes, and a count of hits to each gene in the CAMPER DB. The `camper_distill` script can also leverage dbCAN ids and KO ids from KOfam or KEGG in order to provide more insight into polyphenol metabolism.
+These commands will make two files in the output directory (above named `my_output`, but this is customizable): `annotations.tsv` and `distillate.tsv` (or whatever you name it in your `-o` command). For descriptions of these files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
 
 ### DRAM Combination Workflow
 
-As previously stated, DRAM1.4.0 will include CAMPER by default as an easy tool, but it is possible to use CAMPER with any version of DRAM after 1.3, with one additional command. First follow the instructions above to update your DRAM environment with CAMPER_DRAMKit. Then with that environment activated, you should be able to run the following commands to make a new raw annotations file with all the DRAM data you expect and the CAMPER data added in.
+As previously stated, DRAM1.4.0 will include CAMPER by default as an easy tool, but it is possible to use CAMPER with any version of DRAM after 1.3, with one additional command. First follow the instructions above to update your DRAM environment with CAMPER_DRAMKit. Then with that environment activated, you should be able to run the following commands to make a new raw annotations file with all the DRAM data you expect, and the CAMPER data added in.
 
 If you are not able to update your DRAM environment for whatever reason, you will simply need to switch environments mid-workflow.
 
@@ -127,19 +147,23 @@ DRAM.py annotate -i 'my_bins/*.fa' -o dram_output
 camper_annotate -i my_genes.faa -a dram_output_annotation -o camper_dram_output
 ```
 
-This will create a new set of raw annotations with CAMPER data added, in this case the path of the new file will be `camper_dram_output/annotations.tsv`. You now have two options, if you are only interested in polyphenol metabolism the fastest way to get a distilled summary of related genes is to use the `camper_distill` command to get a distillate with all the key genes from both DRAM and CAMPER data.
+This will create a new set of raw annotations with CAMPER data added, in this case the path of the new file will be `camper_dram_output/annotations.tsv`. Then,  use the `camper_distill` command to get a distillate with all the key genes from both DRAM and CAMPER.
 
 ```
 camper_distill  -i camper_dram_output/annotations.tsv -o camper_dram_output/camper_distillate.tsv
 ```
+For descriptions of the `annotations.tsv` and summary file, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
+
 ### Other Tools and flags
 
-In order to further customize your workflow, you can take advantage of a few more options in the CAMPER_DRAMKit package.
-**Combine Annotations With low memory:** You may want to reannotate many annotation files, possibly from more than one version of DRAM. To this end we include the `combine_annotations_lowmem` which should combine many annotations quickly and with a small memory footprint, even if they come from different versions of DRAM. The command is used like so:
+In order to further customize your workflow, you can take advantage of a few more options in the CAMPER_DRAMKit package:  
+
+**Combine Annotations With low memory:** You may want to **re-annotate** many exisiting DRAM annotation files, possibly from more than one version of DRAM. To this end we include the `combine_annotations_lowmem` command which should combine many annotation files quickly and with a small memory footprint, even if they come from different versions of DRAM. The command is used like so:
 ```
 Combine_annotations_lowmem -i /path/to/many/dramfolders/*/annotations.tsv -o combined_annotation.tsv
 ```
 The input path needs to be a wild card pointing to a set of DRAM annotation files, this is passed to the python glob command, but the format should be familiar to anyone who uses bash and you can test it with the `ls` command.
+
 **Manually Specifying the Location of CAMPER Files:** The behavior of the `camper_annotate` and `camper_distill` commands is controlled by the latest version of the CAMPER dataset. If you want to use an older version of CAMPER, it is suggested you install the older version of the CAMPER_DRAMKit tool, as they will be released together and be mutually compatible. However, if you must, you can also specify the files to use with  `camper_annotate` and `camper_distill` using the appropriate arguments. An example is shown below.
 ```
 camper_annotate -i my_genes.faa -o my_output \
@@ -151,3 +175,45 @@ camper_distill  -i my_output/annotations.tsv -o my_output/distillate.tsv \
     --camper_distillate CAMPER_distillate.tsv
 ```
 If at any time you forget these arguments, remember that running any script with the `--help` flag will provide more information. Also note that if you do not specify one or more arguments, the default data will be used.
+
+## 3. I just want to run your BLAST and HMM searches on my own!
+We get that sometimes this is all you want to do! This is the simplest way to use our annotations. See the above [CAMPER Data](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-data) section and download the `CAMPER_blast.fa` and `CAMPER.hmm` files. These can be run using blast, hmmsearch, or mmseqs2 searches of your data, for example:
+```
+makeblastdb -in CAMPER_blast.fa -dbtype prot
+blastp -query my_genes.faa -db CAMPER_blast.fa -out BLAST_my_genes_CAMPER.txt -outfmt 6
+```
+```
+hmmsearch --tblout hmmsearch_my_genes_CAMPER.txt CAMPER.hmm my_genes.faa
+```
+
+**We strongly recommend curating these outputs with the scores given in the `CAMPER_blast_scores.tsv` and `CAMPER_hmm_scores.tsv` files for each profile search.** 
+
+# CAMPER Outputs
+Approaches [1](https://github.com/WrightonLabCSU/CAMPER#using-camper-as-part-of-dram) and [2](https://github.com/WrightonLabCSU/CAMPER#camper-standalone-tool-camper_dramkit) output two files: the raw information for given searches (`annotations.tsv`) and the sumamrized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER_DRAMKit). 
+
+**Raw annotations**: This is either a standalone file, or columns added to a file, depending on search approach. It includes the following columns:
+  - `camper_hits`, A longer CAMPER ID, corresponding to CAMPER ID, gene abbreviation, and description, where applicable
+  - `camper_rank`, A match quality rank based on the value of the bit score (A or B). For BLAST-style searches, an A rank is a bitscore >=200 and B >=120. For HMM-style, scores are specific to each profile (see `CAMPER_hmm_scores.tsv`).
+  - `camper_bitScore`, The bitscore from the best search result. If more than one search meets at least a B-rank for a given gene, the search with the higher score is reported.
+  - `camper_id`: Unique CAMPER ID used in the distillation step, of the form D000XX.
+  - `camper_definition`: A short description of the CAMPER match in the database.
+  - `camper_search_type`: Tells you if a HMM profile or blast search found this match.
+
+**Distillate**: This is either a single file, or the **CAMPER** tab in the `metabolism_summary.xlsx` file. Each row in this file corresponds to a gene in a CAMPER module. It includes the following columns:
+ - `gene_id`, the database IDs assigned to this gene. These can be from CAMPER (D000XX), KEGG (KXXXX), dbCAN (AAX), or EC numbers. Note, some IDs are included more than once in the sheet!
+- `gene_description`, A more informative description of the gene in the step including gene abbreviation and gene name.
+- `module`, The CAMPER module that the given gene belongs to. There are 100 modules in CAMPER.
+- `header`, The classification for the polyphenol substrate following [Phenol-Explorer](http://phenol-explorer.eu/compounds/classification) Ontology. In the form: Polyphenol;Family;Sub-Family;Compound.
+- `subheader`, This contains information about routes, steps, and subunits. Sometimes, a given transformation can be accomplished in more than one sequence of steps: these are termed 'Routes'. Steps indicate the sequential transformations in the module. Subunits denote if the given gene encodes a subunit of a larger complex that carries out a step. Sometime steps are labelled as "optional" if they are not required.
+- `specifc_reaction`, This gives examples of reactions when possible.
+- `oxygen`, This is either "oxic", "anoxic","or "both" for reactions that require oxygen, dont require oxygen, or can function with or without, respectively. Note: these are largely based on literature reporting and the systems they were characterized in, and should be used as guidelines. 
+- `EC`, The EC number (if known) for a reaction.
+- `Notes`, Any important information to know about the genes, for example: manual curation, note on gene clusters, etc.  
+**The remaining columns will be counts of each gene in your input files.**
+
+# CAMPER Map
+This is also provided as a PDF file. 
+[Coming Soon!]
+
+# Happy CAMPER-ing!
+Annotations, organization, and conceptualization by [Bridget McGivern](https://github.com/bmcgivern13). Coding and implementation by [Rory Flynn](https://github.com/rmFlynn).
