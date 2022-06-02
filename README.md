@@ -36,9 +36,9 @@ These challenges limit widespread understanding of the transformation of these c
 
 To facilitate the inference of polyphenol metabolism from genomes, CAMPER includes 8 Hidden-Markov Model (HMM) profiles and 33 Basic Local Alignment Search Tool (BLAST) searches for (poly)phenol-active genes. We also provide recommended score cut-offs for searches using two ranks: a more stringent, trusted rank (A) and a more relaxed, exploratory rank (B). The development of these profiles will be described in McGivern et al (in prep). Beyond these 41 profiles, nearly 300 other annotations from other databases (KEGG, dbCAN) are included in the CAMPER summarization.
 
-CAMPER summarizes the gene annotations into 100 modules representing different polyphenol transformations. These modules are classified by the family and sub-family of polyphenols used as substrates (following [Phenol-Explorer](http://phenol-explorer.eu/compounds/classification) Ontology) and by the oxygen requirements for the genes involved. These modules can be as small as a single gene, up to a maximum of 12 genes.
+CAMPER summarizes the gene annotations into 101 modules representing different polyphenol transformations. These modules are classified by the family and sub-family of polyphenols used as substrates (following [Phenol-Explorer](http://phenol-explorer.eu/compounds/classification) Ontology) and by the oxygen requirements for the genes involved. These modules can be as small as a single gene, up to a maximum of 12 genes in the largest module.
 ![camper_pathways_tree_for_github-01](https://user-images.githubusercontent.com/95941779/171468538-3f2cc169-2170-4612-880b-22ad11d7c9e9.png)
-**CAMPER modules are organized by substrates and oxygen requirements, and can include multiple reaction steps.**
+**Figure 1. CAMPER consists of 101 polyphenol transformation modules, organized by substrates (Family and Subfamily) and oxygen requirements. Modules can be composed of 1-12 reaction steps.**
 
 For more detailed information on the organization and outputs, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below, and for module visuals, see the [CAMPER Map](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-map).
 
@@ -46,7 +46,7 @@ For more detailed information on the organization and outputs, see the [CAMPER O
 There are currently three ways to run CAMPER, depending on your goals.
 
 ## CAMPER DATA
-The CAMPER data set consists of 5 files, each serving a key role in enabling reproducible, intelligent annotation of gene data.
+The CAMPER data set consists of 5 files, each serving a key role in enabling reproducible annotation of gene data.
   - CAMPER_blast.fa: A fasta file of CAMPER genes used as a target in a BLAST style search provided by mmseqs search.
   - CAMPER.hmm: A HMM file used as the target in an HMM profile search provide by MMseqs profilesearch
   - CAMPER_blast_scores.tsv: Provides the minimum cut off scores for search results and quality ranks with BLAST style searches.
@@ -70,7 +70,7 @@ DRAM.py distill -i DRAM_wCAMPER/annotations.tsv -o DRAM_wCAMPER_distilled
 
 The difference in outputs between this and default DRAM is that you will find CAMPER-specific columns added to the `annotations.tsv` and you will find a CAMPER tab in your `metabolism_summary.xlsx` output.
 
-For descriptions of the output files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
+For descriptions of the content in output files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
 
 ## 2. CAMPER Standalone Tool: CAMPER_DRAMKit
 
@@ -87,7 +87,7 @@ wget https://github.com/WrightonLabCSU/CAMPER/main/CAMPER_DRAMKit/environment.ya
 conda create --name CAMPER -f ./environment.yaml
 ```
 
-However, if you want to have all of CAMPER at your fingertips you can use the following command to both download this repository, including all the CAMPER data and install the CAMPER_DRAMKit tool.
+However, if you want to have all of CAMPER at your fingertips, you can use the following command to both download this repository, including all the CAMPER data and install the CAMPER_DRAMKit tool.
 
 ```
 git clone https://github.com/WrightonLabCSU/CAMPER.git
@@ -192,24 +192,24 @@ hmmsearch --tblout hmmsearch_my_genes_CAMPER.txt CAMPER.hmm my_genes.faa
 # CAMPER Outputs
 Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram) and [2](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit) output two files: the raw information for given searches (`annotations.tsv`) and the sumamrized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER_DRAMKit). 
 
-**Raw annotations**: This is either a standalone file, or columns added to a file, depending on search approach. It includes the following columns:
-  - `camper_hits`, A longer CAMPER ID, corresponding to CAMPER ID, gene abbreviation, and description, where applicable
-  - `camper_rank`, A match quality rank based on the value of the bit score (A or B). For BLAST-style searches, an A rank is a bitscore >=200 and B >=120. For HMM-style, scores are specific to each profile (see `CAMPER_hmm_scores.tsv`).
+**Raw annotations**: This is either a standalone file, or columns added to a file, depending on search approach. This file tells you the genes in your dataset that pass CAMPER annotation thresholds, what they are annotated as, and the scores. It includes the following columns:
+  - `camper_hits`, A longer ID giving the CAMPER ID, gene abbreviation, and gene description.
+  - `camper_rank`, A match quality rank based on the value of the bit score (A or B). For BLAST-style searches, an A rank is a bitscore >=200 and B >=120. For HMM-style searches, scores are specific to each profile (see `CAMPER_hmm_scores.tsv`).
   - `camper_bitScore`, The bitscore from the best search result. If more than one search meets at least a B-rank for a given gene, the search with the higher score is reported.
   - `camper_id`: Unique CAMPER ID used in the distillation step, of the form D000XX.
   - `camper_definition`: A short description of the CAMPER match in the database.
   - `camper_search_type`: Tells you if a HMM profile or blast search found this match.
 
-**Distillate**: This is either a single file, or the **CAMPER** tab in the `metabolism_summary.xlsx` file. Each row in this file corresponds to a gene in a CAMPER module. It includes the following columns:
- - `gene_id`, the database IDs assigned to this gene. These can be from CAMPER (D000XX), KEGG (KXXXX), dbCAN (AAX), or EC numbers. Note, some IDs are included more than once in the sheet!
+**Distillate**: This is either a single file, or the **CAMPER** tab in the `metabolism_summary.xlsx` file. Each row in this file corresponds to a gene in a CAMPER module. This file gives you gene counts of genes in CAMPER modules. It includes the following columns:
+ - `gene_id`, the database IDs assigned to this gene. These can be from CAMPER (D000XX), KEGG (KXXXX), dbCAN (AAX), or EC numbers. Note, some IDs are included more than once in the sheet if they are involved in more than one module!
 - `gene_description`, A more informative description of the gene in the step including gene abbreviation and gene name.
-- `module`, The CAMPER module that the given gene belongs to. There are 100 modules in CAMPER.
+- `module`, The CAMPER module that the given gene belongs to. There are 101 modules in CAMPER.
 - `header`, The classification for the polyphenol substrate following [Phenol-Explorer](http://phenol-explorer.eu/compounds/classification) Ontology. In the form: Polyphenol;Family;Sub-Family;Compound.
 - `subheader`, This contains information about routes, steps, and subunits. Sometimes, a given transformation can be accomplished in more than one sequence of steps: these are termed 'Routes'. Steps indicate the sequential transformations in the module. Subunits denote if the given gene encodes a subunit of a larger complex that carries out a step. Sometime steps are labelled as "optional" if they are not required.
 - `specifc_reaction`, This gives examples of reactions when possible.
-- `oxygen`, This is either "oxic", "anoxic","or "both" for reactions that require oxygen, dont require oxygen, or can function with or without, respectively. Note: these are largely based on literature reporting and the systems they were characterized in, and should be used as guidelines. 
+- `oxygen`, This is either "oxic", "anoxic","or "both" for reactions that require oxygen, don't require oxygen, or can function with or without, respectively. Note: these are largely based on literature reporting and the systems they were characterized in, and should be used as guidelines. 
 - `EC`, The EC number (if known) for a reaction.
-- `Notes`, Any important information to know about the genes, for example: manual curation, note on gene clusters, etc.  
+- `Notes`, Any important information to know about the genes, for example: manual curation to do, note on gene clusters, should they be extracellular etc.  
 **The remaining columns will be counts of each gene in your input files.**
 
 # CAMPER Map
