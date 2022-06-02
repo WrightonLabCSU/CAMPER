@@ -22,6 +22,7 @@ Table of Contents
     * [Standalone CAMPER](https://github.com/WrightonLabCSU/CAMPER#camper-standalone-tool-camper_dramkit)
     * [I just want your profiles to search on my own](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#3-i-just-want-to-run-your-blast-and-hmm-searches-on-my-own)
   * [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs)
+  * [CAMPER Road Map](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-map)
 
 
 # Overview
