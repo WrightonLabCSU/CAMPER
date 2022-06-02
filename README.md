@@ -17,9 +17,9 @@ This software remains unlicensed and the Wrighton Lab reserves all rights for th
 Table of Contents
 =================
   * [Overview](https://github.com/WrightonLabCSU/CAMPER#overview)
-  * [Installation and Usage](https://github.com/WrightonLabCSU/CAMPER#installation)
-    * [Using CAMPER within DRAM](https://github.com/WrightonLabCSU/CAMPER#using-camper-as-part-of-dram)
-    * [Standalone CAMPER](https://github.com/WrightonLabCSU/CAMPER#camper-standalone-tool-camper_dramkit)
+  * [Installation and Usage](https://github.com/WrightonLabCSU/CAMPER#installation-and-usage)
+    * [Using CAMPER within DRAM](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram)
+    * [Standalone CAMPER](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit)
     * [I just want your profiles to search on my own](https://github.com/WrightonLabCSU/CAMPER#3-i-just-want-to-run-your-blast-and-hmm-searches-on-my-own)
   * [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER#camper-outputs)
   * [CAMPER Road Map](https://github.com/WrightonLabCSU/CAMPER#camper-map)
