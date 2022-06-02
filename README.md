@@ -190,7 +190,7 @@ hmmsearch --tblout hmmsearch_my_genes_CAMPER.txt CAMPER.hmm my_genes.faa
 **We strongly recommend curating these outputs with the scores given in the `CAMPER_blast_scores.tsv` and `CAMPER_hmm_scores.tsv` files for each profile search.** 
 
 # CAMPER Outputs
-Approaches [1](https://github.com/WrightonLabCSU/CAMPER#using-camper-as-part-of-dram) and [2](https://github.com/WrightonLabCSU/CAMPER#camper-standalone-tool-camper_dramkit) output two files: the raw information for given searches (`annotations.tsv`) and the sumamrized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER_DRAMKit). 
+Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram) and [2](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit) output two files: the raw information for given searches (`annotations.tsv`) and the sumamrized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER_DRAMKit). 
 
 **Raw annotations**: This is either a standalone file, or columns added to a file, depending on search approach. It includes the following columns:
   - `camper_hits`, A longer CAMPER ID, corresponding to CAMPER ID, gene abbreviation, and description, where applicable
