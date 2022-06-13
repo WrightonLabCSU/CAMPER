@@ -171,7 +171,7 @@ camper_annotate -i my_genes.faa -o my_output \
     --camper_fa_db_cutoffs_loc CAMPER.hmm \
     --camper_hmm_loc CAMPER_blast_scores.tsv  \
    --camper_hmm_cutoffs_loc CAMPER_hmm_scores.tsv
-camper_distill  -i my_output/annotations.tsv -o my_output/distillate.tsv \
+camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv \
     --camper_distillate CAMPER_distillate.tsv
 ```
 If at any time you forget these arguments, remember that running any script with the `--help` flag will provide more information. Also note that if you do not specify one or more arguments, the default data will be used.
