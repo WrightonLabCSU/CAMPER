@@ -9,7 +9,7 @@ This software remains unlicensed and the Wrighton Lab reserves all rights for th
 # CAMPER (BETA)
 
 <p align="center">
-  <img width="741" alt="Screen Shot 2022-03-07 at 1 47 10 PM" src="https://user-images.githubusercontent.com/95941779/157345312-27679138-c32c-4e76-8923-a2c776bccbe9.png">
+  <img width="741" alt="Screen Shot 2022-03-07 at 1 47 10 PM" src="https://user-images.githubusercontent.com/95941779/157345312-27679138-c32c-4e76-8923n2c776bccbe9.png">
  </p>
 
 
@@ -64,7 +64,7 @@ Supply the `--use_camper` flag during the annotation step, like so:
 
 ```
 DRAM.py annotate --use_camper -i 'my_bins/*.fa' -o DRAM_wCAMPER
-DRAM.py distill -i DRAM_wCAMPER/annotations.tsv -o DRAM_wCAMPER_distilled
+DRAM.py distill -a DRAM_wCAMPER/annotations.tsv -o DRAM_wCAMPER_distilled
 ```
 
 The difference in outputs between this and default DRAM is that you will find CAMPER-specific columns added to the `annotations.tsv` and you will find a CAMPER tab in your `metabolism_summary.xlsx` output.
@@ -131,7 +131,7 @@ The simplest workflow is the two-step annotation and summarization of a single a
 
 ```
 camper_annotate -i my_genes.faa -o my_output #annotate
-camper_distill  -i my_output/annotations.tsv -o my_output/distillate.tsv #summarize
+camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv #summarize
 ```
 
 These commands will make two files in the output directory (above named `my_output`, but this is customizable): `annotations.tsv` and `distillate.tsv` (or whatever you name it in your `-o` command). For descriptions of these files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
@@ -150,7 +150,7 @@ camper_annotate -i my_genes.faa -a dram_output_annotation -o camper_dram_output
 This will create a new set of raw annotations with CAMPER data added, in this case the path of the new file will be `camper_dram_output/annotations.tsv`. Then,  use the `camper_distill` command to get a distillate with all the key genes from both DRAM and CAMPER.
 
 ```
-camper_distill  -i camper_dram_output/annotations.tsv -o camper_dram_output/camper_distillate.tsv
+camper_distill  -a camper_dram_output/annotations.tsv -o camper_dram_output/camper_distillate.tsv
 ```
 For descriptions of the `annotations.tsv` and summary file, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
 
