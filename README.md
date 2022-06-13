@@ -46,7 +46,7 @@ There are currently three ways to run CAMPER, depending on your goals.
 
 ## CAMPER DATA
 The CAMPER data set consists of 5 files, each serving a key role in enabling reproducible annotation of gene data.
-  - CAMPER_blast.fa: A fasta file of CAMPER genes used as a target in a BLAST style search provided by mmseqs search.
+  - CAMPER_blast.faa: A fasta file of CAMPER genes used as a target in a BLAST style search provided by mmseqs search.
   - CAMPER.hmm: A HMM file used as the target in an HMM profile search provide by MMseqs profilesearch
   - CAMPER_blast_scores.tsv: Provides the minimum cut off scores for search results and quality ranks with BLAST style searches.
   - CAMPER_hmm_scores.tsv: Provides the minimum cut off scores for search results and quality ranks with HMM Profile searches.
@@ -167,9 +167,9 @@ The input path needs to be a wild card pointing to a set of DRAM annotation file
 **Manually Specifying the Location of CAMPER Files:** The behavior of the `camper_annotate` and `camper_distill` commands is controlled by the latest version of the CAMPER dataset. If you want to use an older version of CAMPER, it is suggested you install the older version of the CAMPER_DRAMKit tool, as they will be released together and be mutually compatible. However, if you must, you can also specify the files to use with  `camper_annotate` and `camper_distill` using the appropriate arguments. An example is shown below.
 ```
 camper_annotate -i my_genes.faa -o my_output \
-    --camper_fa_db_loc CAMPER_blast.fa \
-    --camper_fa_db_cutoffs_loc CAMPER.hmm \
-    --camper_hmm_loc CAMPER_blast_scores.tsv  \
+    --camper_fa_db_loc CAMPER_blast.faa \
+    --camper_fa_db_cutoffs_loc CAMPER_blast_scores.tsv \
+    --camper_hmm_loc CAMPER.hmm  \
    --camper_hmm_cutoffs_loc CAMPER_hmm_scores.tsv
 camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv \
     --camper_distillate CAMPER_distillate.tsv
@@ -177,10 +177,10 @@ camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv \
 If at any time you forget these arguments, remember that running any script with the `--help` flag will provide more information. Also note that if you do not specify one or more arguments, the default data will be used.
 
 ## 3. I just want to run your BLAST and HMM searches on my own!
-We get that sometimes this is all you want to do! This is the simplest way to use our annotations. See the above [CAMPER Data](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-data) section and download the `CAMPER_blast.fa` and `CAMPER.hmm` files. These can be run using blast, hmmsearch, or mmseqs2 searches of your data, for example:
+We get that sometimes this is all you want to do! This is the simplest way to use our annotations. See the above [CAMPER Data](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-data) section and download the `CAMPER_blast.faa` and `CAMPER.hmm` files. These can be run using blast, hmmsearch, or mmseqs2 searches of your data, for example:
 ```
-makeblastdb -in CAMPER_blast.fa -dbtype prot
-blastp -query my_genes.faa -db CAMPER_blast.fa -out BLAST_my_genes_CAMPER.txt -outfmt 6
+makeblastdb -in CAMPER_blast.faa -dbtype prot
+blastp -query my_genes.faa -db CAMPER_blast.faa -out BLAST_my_genes_CAMPER.txt -outfmt 6
 ```
 ```
 hmmsearch --tblout hmmsearch_my_genes_CAMPER.txt CAMPER.hmm my_genes.faa
