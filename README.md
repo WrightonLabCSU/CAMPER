@@ -9,7 +9,7 @@ This software remains unlicensed and the Wrighton Lab reserves all rights for th
 
 # CAMPER (BETA)
 
-<p align="center">random forest power analysis
+<p align="center">
   <img width="741" alt="Screen Shot 2022-03-07 at 1 47 10 PM" src="https://user-images.githubusercontent.com/95941779/157345312-27679138-c32c-4e76-8923-a2c776bccbe9.png">
  </p>
 
@@ -26,13 +26,13 @@ Table of Contents
 
 
 # Overview
-**C**urated **A**nnotations for **M**icrobial (**P**oly)phenol **E**nzymes and **R**eactions (**CAMPER**) is a tool that annotates genes likely involved in transforming polyphenols, and provides chemical context for these transformations in a summarized form. CAMPER aims to address a blind spot in microbial metabolism. It is currently challenging to infer polyphenol metabolism from genomic data because:  
+**C**urated **A**nnotations for **M**icrobial (**P**oly)phenol **E**nzymes and **R**eactions (**CAMPER**) is a tool that annotates genes likely involved in transforming polyphenols, and provides chemical context for these transformations in a summarized form. CAMPER aims to address a blind spot in microbial metabolism. It is currently challenging to infer polyphenol metabolism from genomic data because:
 1)	Genes encoding characterized enzymes have not been propagated into annotation databases
 3)	Genes in databases can often be involved in multiple pathways, requiring expert knowledge to get polyphenol context
 4)	Polyphenols can be transformed in many ways – oxidized, reduced, demethylated, deglycosylated, etc.
-5)	Polyphenols are a complex class of compounds  
+5)	Polyphenols are a complex class of compounds
 
-These challenges limit widespread understanding of the transformation of these compounds across environments. 
+These challenges limit widespread understanding of the transformation of these compounds across environments.
 
 To facilitate the inference of polyphenol metabolism from genomes, CAMPER includes 8 Hidden-Markov Model (HMM) profiles and 33 Basic Local Alignment Search Tool (BLAST) searches for (poly)phenol-active genes. We also provide recommended score cut-offs for searches using two ranks: a more stringent, trusted rank (A) and a more relaxed, exploratory rank (B). The development of these profiles will be described in McGivern et al (in prep). Beyond these 41 profiles, nearly 300 other annotations from other databases (KEGG, dbCAN) are included in the CAMPER summarization.
 
@@ -51,14 +51,14 @@ The CAMPER data set consists of 5 files, each serving a key role in enabling rep
   - CAMPER.hmm: A HMM file used as the target in an HMM profile search provide by MMseqs profilesearch
   - CAMPER_blast_scores.tsv: Provides the minimum cut off scores for search results and quality ranks with BLAST style searches.
   - CAMPER_hmm_scores.tsv: Provides the minimum cut off scores for search results and quality ranks with HMM Profile searches.
-  - CAMPER_distillate.tsv: A custom distillate, for use with DRAM or with CAMPER_DRAMKit, to summarize the annotation results.  
-  
+  - CAMPER_distillate.tsv: A custom distillate, for use with DRAM or with CAMPER_DRAMKit, to summarize the annotation results.
+
 ## 1. Using CAMPER within DRAM
 
 **NOTE: this functionality will be available in the to-be-released DRAM1.4.0.** If you hope to run it before then, see the [With DRAM](https://github.com/WrightonLabCSU/CAMPER#c-installing-with-dram) section below.
-  
-  
-If your goal is to integrate CAMPER into your regular genome annotation pipeline, we recommend running it as part of [DRAM](https://github.com/WrightonLabCSU/DRAM). **You will also get the benefit of summarizing 300 annotations derived from KEGG and dbCAN databases, if you have these databases installed, in addition to the 41 CAMPER annotations.** This will provide curated annotation and summarization of polyphenol transformation genes in addition to the regular DRAM databases. 
+
+
+If your goal is to integrate CAMPER into your regular genome annotation pipeline, we recommend running it as part of [DRAM](https://github.com/WrightonLabCSU/DRAM). **You will also get the benefit of summarizing 300 annotations derived from KEGG and dbCAN databases, if you have these databases installed, in addition to the 41 CAMPER annotations.** This will provide curated annotation and summarization of polyphenol transformation genes in addition to the regular DRAM databases.
 
 There are two steps to running CAMPER in DRAM: (1) annotation and (2) summarization (distillation, in DRAM lingo).
 Supply the `--use_camper` flag during the annotation step, like so:
@@ -157,7 +157,7 @@ For descriptions of the `annotations.tsv` and summary file, see the [CAMPER Outp
 
 ### Other Tools and flags
 
-In order to further customize your workflow, you can take advantage of a few more options in the CAMPER_DRAMKit package:  
+In order to further customize your workflow, you can take advantage of a few more options in the CAMPER_DRAMKit package:
 
 **Combine Annotations With low memory:** You may want to **re-annotate** many exisiting DRAM annotation files, possibly from more than one version of DRAM. To this end we include the `combine_annotations_lowmem` command which should combine many annotation files quickly and with a small memory footprint, even if they come from different versions of DRAM. The command is used like so:
 ```
@@ -187,10 +187,10 @@ blastp -query my_genes.faa -db CAMPER_blast.fa -out BLAST_my_genes_CAMPER.txt -o
 hmmsearch --tblout hmmsearch_my_genes_CAMPER.txt CAMPER.hmm my_genes.faa
 ```
 
-**We strongly recommend curating these outputs with the scores given in the `CAMPER_blast_scores.tsv` and `CAMPER_hmm_scores.tsv` files for each profile search.** 
+**We strongly recommend curating these outputs with the scores given in the `CAMPER_blast_scores.tsv` and `CAMPER_hmm_scores.tsv` files for each profile search.**
 
 # CAMPER Outputs
-Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram) and [2](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit) output two files: the raw information for given searches (`annotations.tsv`) and the sumamrized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER_DRAMKit). 
+Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram) and [2](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit) output two files: the raw information for given searches (`annotations.tsv`) and the sumamrized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER_DRAMKit).
 
 **Raw annotations**: This is either a standalone file, or columns added to a file, depending on search approach. This file tells you the genes in your dataset that pass CAMPER annotation thresholds, what they are annotated as, and the scores. It includes the following columns:
   - `camper_hits`, A longer ID giving the CAMPER ID, gene abbreviation, and gene description.
@@ -207,13 +207,13 @@ Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dr
 - `header`, The classification for the polyphenol substrate following [Phenol-Explorer](http://phenol-explorer.eu/compounds/classification) Ontology. In the form: Polyphenol;Family;Sub-Family;Compound.
 - `subheader`, This contains information about routes, steps, and subunits. Sometimes, a given transformation can be accomplished in more than one sequence of steps: these are termed 'Routes'. Steps indicate the sequential transformations in the module. Subunits denote if the given gene encodes a subunit of a larger complex that carries out a step. Sometime steps are labelled as "optional" if they are not required.
 - `specifc_reaction`, This gives examples of reactions when possible.
-- `oxygen`, This is either "oxic", "anoxic","or "both" for reactions that require oxygen, don't require oxygen, or can function with or without, respectively. Note: these are largely based on literature reporting and the systems they were characterized in, and should be used as guidelines. 
+- `oxygen`, This is either "oxic", "anoxic","or "both" for reactions that require oxygen, don't require oxygen, or can function with or without, respectively. Note: these are largely based on literature reporting and the systems they were characterized in, and should be used as guidelines.
 - `EC`, The EC number (if known) for a reaction.
-- `Notes`, Any important information to know about the genes, for example: manual curation to do, note on gene clusters, should they be extracellular etc.  
+- `Notes`, Any important information to know about the genes, for example: manual curation to do, note on gene clusters, should they be extracellular etc.
 **The remaining columns will be counts of each gene in your input files.**
 
 # CAMPER Map
-This is also provided as a PDF file. 
+This is also provided as a PDF file.
 ![CAMPER_RoadMap_v1-01](https://user-images.githubusercontent.com/95941779/171663024-4e53989c-f88b-4689-98b6-5f4df2c03b45.png)
 
 # Happy CAMPER-ing!
