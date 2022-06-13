@@ -55,7 +55,7 @@ The CAMPER data set consists of 5 files, each serving a key role in enabling rep
   
 ## 1. Using CAMPER within DRAM
 
-**NOTE: this functionality will be available in the to-be-released DRAM1.4.0.** If you hope to run it before then, see the [With DRAM](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#installing-with-dram) section below.
+**NOTE: this functionality will be available in the to-be-released DRAM1.4.0.** If you hope to run it before then, see the [With DRAM](https://github.com/WrightonLabCSU/CAMPER#c-installing-with-dram) section below.
   
   
 If your goal is to integrate CAMPER into your regular genome annotation pipeline, we recommend running it as part of [DRAM](https://github.com/WrightonLabCSU/DRAM). **You will also get the benefit of summarizing 300 annotations derived from KEGG and dbCAN databases, if you have these databases installed, in addition to the 41 CAMPER annotations.** This will provide curated annotation and summarization of polyphenol transformation genes in addition to the regular DRAM databases. 
@@ -83,8 +83,8 @@ The simplest way to get started with the CAMPER_DRAMKit is with Conda, using the
 CAMPER_DRAMKit comes with the latest version of CAMPER preloaded, so if all you want to do is annotate and distill called genes with CAMPER, you only need the following commands.
 
 ```
-wget https://github.com/WrightonLabCSU/CAMPER/main/CAMPER_DRAMKit/environment.yaml
-conda create --name CAMPER -f ./environment.yaml
+  wget https://raw.githubusercontent.com/WrightonLabCSU/CAMPER/main/CAMPER_DRAMKit/environment.yaml
+  conda env create --name CAMPER -f ./environment.yaml
 ```
 
 However, if you want to have all of CAMPER at your fingertips, you can use the following command to both download this repository, including all the CAMPER data and install the CAMPER_DRAMKit tool.
@@ -92,7 +92,7 @@ However, if you want to have all of CAMPER at your fingertips, you can use the f
 ```
 git clone https://github.com/WrightonLabCSU/CAMPER.git
 cd CAMPER/CAMPER_DRAMKit
-conda create --name CAMPER -f ./environment.yaml
+conda env create --name CAMPER -f ./environment.yaml
 ```
 
 In both cases, you can activate the newly made environments with the command:
@@ -116,7 +116,7 @@ pip install camper_dramkit
 If you intend to use CAMPER_DRAMKit with DRAM, it may be expedient to install them in the same Conda environment. This is easy to do if you have already made a DRAM Conda environment with the [instructions in the DRAM README](https://github.com/WrightonLabCSU/DRAM), then you can add CAMPER with the following commands:
 
 ```
-wget https://github.com/WrightonLabCSU/CAMPER/main/CAMPER_DRAMKit/environment.yaml
+wget https://raw.githubusercontent.com/WrightonLabCSU/CAMPER/main/CAMPER_DRAMKit/environment.yaml
 conda env update --name DRAM -f ./environment.yaml
 ```
 
