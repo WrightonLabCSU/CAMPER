@@ -1,7 +1,6 @@
-
 # BETA RELEASE
 
-The CAMPER software and data is currently in a testing state and needs more validations before it should be used for any publication or production task. This RELEASE is for early adopters to get a taste of what CAMPER can do and how it can be incorporated into a workflow. A official release will be available soon.
+The CAMPER software and data is currently in a testing state and needs more validations before it should be used for any publication or production task. This RELEASE is for early adopters to get a taste of what CAMPER can do and how it can be incorporated into a workflow. An official release will be available soon.
 
 # License Pending
 
@@ -27,10 +26,10 @@ Table of Contents
 
 # Overview
 **C**urated **A**nnotations for **M**icrobial (**P**oly)phenol **E**nzymes and **R**eactions (**CAMPER**) is a tool that annotates genes likely involved in transforming polyphenols, and provides chemical context for these transformations in a summarized form. CAMPER aims to address a blind spot in microbial metabolism. It is currently challenging to infer polyphenol metabolism from genomic data because:
-1)	Genes encoding characterized enzymes have not been propagated into annotation databases
-3)	Genes in databases can often be involved in multiple pathways, requiring expert knowledge to get polyphenol context
-4)	Polyphenols can be transformed in many ways – oxidized, reduced, demethylated, deglycosylated, etc.
-5)	Polyphenols are a complex class of compounds
+1)      Genes encoding characterized enzymes have not been propagated into annotation databases
+3)      Genes in databases can often be involved in multiple pathways, requiring expert knowledge to get polyphenol context
+4)      Polyphenols can be transformed in many ways – oxidized, reduced, demethylated, deglycosylated, etc.
+5)      Polyphenols are a complex class of compounds
 
 These challenges limit widespread understanding of the transformation of these compounds across environments.
 
@@ -159,7 +158,7 @@ For descriptions of the `annotations.tsv` and summary file, see the [CAMPER Outp
 
 In order to further customize your workflow, you can take advantage of a few more options in the CAMPER_DRAMKit package:
 
-**Combine Annotations With low memory:** You may want to **re-annotate** many exisiting DRAM annotation files, possibly from more than one version of DRAM. To this end we include the `combine_annotations_lowmem` command which should combine many annotation files quickly and with a small memory footprint, even if they come from different versions of DRAM. The command is used like so:
+**Combine Annotations With low memory:** You may want to **re-annotate** many existing DRAM annotation files, possibly from more than one version of DRAM. To this end we include the `combine_annotations_lowmem` command which should combine many annotation files quickly and with a small memory footprint, even if they come from different versions of DRAM. The command is used like so:
 ```
 Combine_annotations_lowmem -i /path/to/many/dramfolders/*/annotations.tsv -o combined_annotation.tsv
 ```
@@ -190,9 +189,9 @@ hmmsearch --tblout hmmsearch_my_genes_CAMPER.txt CAMPER.hmm my_genes.faa
 **We strongly recommend curating these outputs with the scores given in the `CAMPER_blast_scores.tsv` and `CAMPER_hmm_scores.tsv` files for each profile search.**
 
 # CAMPER Outputs
-Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram) and [2](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit) output two files: the raw information for given searches (`annotations.tsv`) and the sumamrized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER_DRAMKit).
+Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram) and [2](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit) output two files: the raw information for given searches (`annotations.tsv`) and the summarized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER_DRAMKit).
 
-**Raw annotations**: This is either a standalone file, or columns added to a file, depending on search approach. This file tells you the genes in your dataset that pass CAMPER annotation thresholds, what they are annotated as, and the scores. It includes the following columns:
+**Raw annotations**: This is either a standalone file, or columns added to a file, depending on the search approach. This file tells you the genes in your dataset that pass CAMPER annotation thresholds, what they are annotated as, and the scores. It includes the following columns:
   - `camper_hits`, A longer ID giving the CAMPER ID, gene abbreviation, and gene description.
   - `camper_rank`, A match quality rank based on the value of the bit score (A or B). For BLAST-style searches, an A rank is a bitscore >=200 and B >=120. For HMM-style searches, scores are specific to each profile (see `CAMPER_hmm_scores.tsv`).
   - `camper_bitScore`, The bitscore from the best search result. If more than one search meets at least a B-rank for a given gene, the search with the higher score is reported.
@@ -205,9 +204,9 @@ Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dr
 - `gene_description`, A more informative description of the gene in the step including gene abbreviation and gene name.
 - `module`, The CAMPER module that the given gene belongs to. There are 101 modules in CAMPER.
 - `header`, The classification for the polyphenol substrate following [Phenol-Explorer](http://phenol-explorer.eu/compounds/classification) Ontology. In the form: Polyphenol;Family;Sub-Family;Compound.
-- `subheader`, This contains information about routes, steps, and subunits. Sometimes, a given transformation can be accomplished in more than one sequence of steps: these are termed 'Routes'. Steps indicate the sequential transformations in the module. Subunits denote if the given gene encodes a subunit of a larger complex that carries out a step. Sometime steps are labelled as "optional" if they are not required.
+- `subheader`, This contains information about routes, steps, and subunits. Sometimes, a given transformation can be accomplished in more than one sequence of steps: these are termed 'Routes'. Steps indicate the sequential transformations in the module. Subunits denote if the given gene encodes a subunit of a larger complex that carries out a step. Sometimes steps are labeled as "optional" if they are not required.
 - `specifc_reaction`, This gives examples of reactions when possible.
-- `oxygen`, This is either "oxic", "anoxic","or "both" for reactions that require oxygen, don't require oxygen, or can function with or without, respectively. Note: these are largely based on literature reporting and the systems they were characterized in, and should be used as guidelines.
+- `oxygen`, This is either "oxic", "anoxic"," or "both" for reactions that require oxygen, don't require oxygen, or can function with or without, respectively. Note: these are largely based on literature reporting and the systems they were characterized in, and should be used as guidelines.
 - `EC`, The EC number (if known) for a reaction.
 - `Notes`, Any important information to know about the genes, for example: manual curation to do, note on gene clusters, should they be extracellular etc.
 **The remaining columns will be counts of each gene in your input files.**
@@ -218,3 +217,4 @@ This is also provided as a PDF file.
 
 # Happy CAMPER-ing!
 Annotations, organization, and conceptualization by [Bridget McGivern](https://github.com/bmcgivern13). Coding and implementation by [Rory Flynn](https://github.com/rmFlynn).
+
