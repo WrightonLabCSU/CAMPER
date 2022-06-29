@@ -8,9 +8,7 @@ This software remains unlicensed and the Wrighton Lab reserves all rights for th
 
 # CAMPER (BETA)
 
-<p align="center">
-  <img width="741" alt="Screen Shot 2022-03-07 at 1 47 10 PM" src="https://user-images.githubusercontent.com/95941779/157345312-27679138-c32c-4e76-8923n2c776bccbe9.png">
- </p>
+(https://user-images.githubusercontent.com/95941779/176457742-38571b02-8cba-41e8-8ab6-548c0b07730f.png)
 
 
 Table of Contents
@@ -26,10 +24,10 @@ Table of Contents
 
 # Overview
 **C**urated **A**nnotations for **M**icrobial (**P**oly)phenol **E**nzymes and **R**eactions (**CAMPER**) is a tool that annotates genes likely involved in transforming polyphenols, and provides chemical context for these transformations in a summarized form. CAMPER aims to address a blind spot in microbial metabolism. It is currently challenging to infer polyphenol metabolism from genomic data because:
-1)      Genes encoding characterized enzymes have not been propagated into annotation databases
-3)      Genes in databases can often be involved in multiple pathways, requiring expert knowledge to get polyphenol context
-4)      Polyphenols can be transformed in many ways – oxidized, reduced, demethylated, deglycosylated, etc.
-5)      Polyphenols are a complex class of compounds
+1) Genes encoding characterized enzymes have not been propagated into annotation databases
+3) Genes in databases can often be involved in multiple pathways, requiring expert knowledge to get polyphenol context
+4) Polyphenols can be transformed in many ways – oxidized, reduced, demethylated, deglycosylated, etc.
+5) Polyphenols are a complex class of compounds
 
 These challenges limit widespread understanding of the transformation of these compounds across environments.
 
