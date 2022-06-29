@@ -8,7 +8,9 @@ This software remains unlicensed and the Wrighton Lab reserves all rights for th
 
 # CAMPER (BETA)
 
-(https://user-images.githubusercontent.com/95941779/176457742-38571b02-8cba-41e8-8ab6-548c0b07730f.png)
+<p align="center">
+<img width="660" alt="camper_logo" src="https://user-images.githubusercontent.com/95941779/176459947-c5497a73-2b77-42f0-99ee-6a836f23d6a7.png">
+</p>
 
 
 Table of Contents
