@@ -54,9 +54,6 @@ The CAMPER data set consists of 5 files, each serving a key role in enabling rep
 
 ## 1. Using CAMPER within DRAM
 
-**NOTE: this functionality will be available in the to-be-released DRAM1.4.0.** If you hope to run it before then, see the [With DRAM](https://github.com/WrightonLabCSU/CAMPER#c-installing-with-dram) section below.
-
-
 If your goal is to integrate CAMPER into your regular genome annotation pipeline, we recommend running it as part of [DRAM](https://github.com/WrightonLabCSU/DRAM). **You will also get the benefit of summarizing 300 annotations derived from KEGG and dbCAN databases, if you have these databases installed, in addition to the 41 CAMPER annotations.** This will provide curated annotation and summarization of polyphenol transformation genes in addition to the regular DRAM databases.
 
 There are two steps to running CAMPER in DRAM: (1) annotation and (2) summarization (distillation, in DRAM lingo).
@@ -138,7 +135,7 @@ These commands will make two files in the output directory (above named `my_outp
 
 ### DRAM Combination Workflow
 
-As previously stated, DRAM1.4.0 will include CAMPER by default as an easy tool, but it is possible to use CAMPER with any version of DRAM after 1.3, with one additional command. First follow the instructions above to update your DRAM environment with CAMPER_DRAMKit. Then with that environment activated, you should be able to run the following commands to make a new raw annotations file with all the DRAM data you expect, and the CAMPER data added in.
+It is possible to use CAMPER with any version of DRAM after 1.3, with one additional command. First follow the instructions above to update your DRAM environment with CAMPER_DRAMKit. Then with that environment activated, you should be able to run the following commands to make a new raw annotations file with all the DRAM data you expect, and the CAMPER data added in.
 
 If you are not able to update your DRAM environment for whatever reason, you will simply need to switch environments mid-workflow.
 
