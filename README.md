@@ -39,7 +39,7 @@ CAMPER summarizes the gene annotations into 101 modules representing different p
 ![camper_pathways_tree_for_github-01](https://user-images.githubusercontent.com/95941779/171468538-3f2cc169-2170-4612-880b-22ad11d7c9e9.png)
 **Figure 1. CAMPER consists of 101 polyphenol transformation modules, organized by substrates (Family and Subfamily) and oxygen requirements. Modules can be composed of 1-12 reaction steps.**
 
-For more detailed information on the organization and outputs, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below, and for module visuals, see the [CAMPER Map](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-map).
+For more detailed information on the organization and outputs, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER#camper-outputs) section below, and for module visuals, see the [CAMPER Map](https://github.com/WrightonLabCSU/CAMPER#camper-map).
 
 # Installation and Usage
 There are currently three ways to run CAMPER, depending on your goals.
@@ -66,7 +66,7 @@ DRAM.py distill -a DRAM_wCAMPER/annotations.tsv -o DRAM_wCAMPER_distilled
 
 The difference in outputs between this and default DRAM is that you will find CAMPER-specific columns added to the `annotations.tsv` and you will find a CAMPER tab in your `metabolism_summary.xlsx` output.
 
-For descriptions of the content in output files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
+For descriptions of the content in output files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER#camper-outputs) section below.
 
 ## 2. CAMPER Standalone Tool: CAMPER_DRAMKit
 
@@ -131,7 +131,7 @@ camper_annotate -i my_genes.faa -o my_output #annotate
 camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv #summarize
 ```
 
-These commands will make two files in the output directory (above named `my_output`, but this is customizable): `annotations.tsv` and `distillate.tsv` (or whatever you name it in your `-o` command). For descriptions of these files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
+These commands will make two files in the output directory (above named `my_output`, but this is customizable): `annotations.tsv` and `distillate.tsv` (or whatever you name it in your `-o` command). For descriptions of these files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU#camper-outputs) section below.
 
 ### DRAM Combination Workflow
 
@@ -149,7 +149,7 @@ This will create a new set of raw annotations with CAMPER data added, in this ca
 ```
 camper_distill  -a camper_dram_output/annotations.tsv -o camper_dram_output/camper_distillate.tsv
 ```
-For descriptions of the `annotations.tsv` and summary file, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-outputs) section below.
+For descriptions of the `annotations.tsv` and summary file, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER#camper-outputs) section below.
 
 ### Other Tools and flags
 
@@ -174,7 +174,7 @@ camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv \
 If at any time you forget these arguments, remember that running any script with the `--help` flag will provide more information. Also note that if you do not specify one or more arguments, the default data will be used.
 
 ## 3. I just want to run your BLAST and HMM searches on my own!
-We get that sometimes this is all you want to do! This is the simplest way to use our annotations. See the above [CAMPER Data](https://github.com/WrightonLabCSU/CAMPER/edit/main/README.md#camper-data) section and download the `CAMPER_blast.faa` and `CAMPER.hmm` files. These can be run using blast, hmmsearch, or mmseqs2 searches of your data, for example:
+We get that sometimes this is all you want to do! This is the simplest way to use our annotations. See the above [CAMPER Data](https://github.com/WrightonLabCSU/CAMPER#camper-data) section and download the `CAMPER_blast.faa` and `CAMPER.hmm` files. These can be run using blast, hmmsearch, or mmseqs2 searches of your data, for example:
 ```
 makeblastdb -in CAMPER_blast.faa -dbtype prot
 blastp -query my_genes.faa -db CAMPER_blast.faa -out BLAST_my_genes_CAMPER.txt -outfmt 6
