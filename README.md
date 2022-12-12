@@ -1,3 +1,25 @@
+Aim: To explain the landscape of the lab documentation, why the setup exists, what each part is for and how to work with its disparate components. 
+
+At the time of writing, the lab's documentation is split across 5 platforms, each organized to serve a goal and each ideally interlinked. The domains are:
+Air table: Used to point to more docs and provide basic docs. Specifically the server air table which lists locations on the server of software, conda environments, maintenance tools and many other things.
+Github: Tool documentation. Where we store detailed information that is related to specific lab tools and software projects. Note that projects the lab intends to make public probably have a ReadTheDocs page where most documentation should reside.
+ReadTheDocs: Professional Tool Documentation. This third party tool is free for our public repositories, and is much more powerful than the GitHub Markdown used on GitHub itself. For large public projects it is the way to go, but it can be a bit cumbersome to a layman to administer.
+The server itself: Day to day notes. Scripts should document themselves and projects should contain notes. Even if the notes are minimal in the case of one-off tasks.
+Dropbox: Catch all. Where we store documentation that is not connected to any project and not intended to move outside the lab. These documents mostly live in this folder specifically.
+These all ideally work together.  The air table links to the documentation for tools on Dropbox and GitHub. GitHub provides basic Documentation mostly for technical users, read the docs is a more professional form of the same, and Dropbox files in the gaps. 
+# more information
+If you are a regular user, then you have permission to stop reading this document here, but I hope you will continue a bit more. Good documentation needs to be input from all parts of the team, especially the less experienced among us.  If you don’t see something, right something!
+## Working with AirTable
+AirTable is more or less Excel online and with significantly better linking and lovely pre-formatted fields. 
+The air table can get very sprawling, but all the user needs to worry about is the environments, and scripts tabs. The program's tabs is largely a relic, and will probably never be added to.(Delete this once this is tab is gone)
+For each script added to the scripts table, all fields should have some input but the most important is a link to the documentation, and a few simple examples. We have learned that scripts should go into the air table when they are completely done and not before. And the documentation should be available on another platform. We expect the target audience of lab tools to be technical users but we want the software on zenith to be highly available. 
+Software should be installed in dedicated conda environments, and tested as more than one user using “sudo su name” (this often affects the availability of local software). Once Conda environments are created, they can be re-used multiple times. 
+Conda's environments should be added to the Conda Environments sheet and marked with the appropriate label (In Use and Relevant) 
+
+
+
+
+I would rather you use the command line argument in the same release.
 # BETA RELEASE
 
 The CAMPER software and data is currently in a testing state and needs more validations before it should be used for any publication or production task. This RELEASE is for early adopters to get a taste of what CAMPER can do and how it can be incorporated into a workflow. An official release will be available soon.
@@ -17,9 +39,9 @@ Table of Contents
 =================
   * [Overview](https://github.com/WrightonLabCSU/CAMPER#overview)
   * [Installation and Usage](https://github.com/WrightonLabCSU/CAMPER#installation-and-usage)
-    * [Using CAMPER within DRAM](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram)
-    * [Standalone CAMPER](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit)
-    * [I just want your profiles to search on my own](https://github.com/WrightonLabCSU/CAMPER#3-i-just-want-to-run-your-blast-and-hmm-searches-on-my-own)
+	* [Using CAMPER within DRAM](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram)
+	* [Standalone CAMPER](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit)
+	* [I just want your profiles to search on my own](https://github.com/WrightonLabCSU/CAMPER#3-i-just-want-to-run-your-blast-and-hmm-searches-on-my-own)
   * [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER#camper-outputs)
   * [CAMPER Road Map](https://github.com/WrightonLabCSU/CAMPER#camper-map)
 
@@ -124,14 +146,14 @@ Once installed, CAMPER_DRAMKit will provide three commands: `camper_annotate`, `
 
 ### Standalone Workflow
 
-The simplest workflow is the two-step annotation and summarization of a single amino acid fasta file. An example of such a workflow is shown below. This will run CAMPER without any DRAM input at all, and the results will be argueably incompleat without the dram data. 
+The simplest workflow is the two-step annotation and summarization of a single amino acid fasta file. An example of such a workflow is shown below. This will run CAMPER without any DRAM input at all, and the results will be arguably incomplete without the dram data. In order to use CAMPER_kit with DRAM see the next section.
 
 ```
-camper_annotate -i my_genes.faa -o my_output #annotate, note the lack of the "-a" argument, this will not have dram data 
+camper_annotate -i my_genes.faa -o my_output #annotate, note the lack of the "-a" argument, this will not have dram data
 camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv #summarize
 ```
 
-These commands will make two files in the output directory (above named `my_output`, but this is customizable): `annotations.tsv` and `distillate.tsv` (or whatever you name it in your `-o` command). For descriptions of these files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU#camper-outputs) section below.
+These commands will make two files in the output directory (above named `my_output`, but this is customizable): `annotations.tsv` and `distillate.tsv` (or whatever you name it in your `-o` command). For descriptions of these files, see the [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER#camper-outputs) section below.
 
 ### DRAM Combination Workflow
 
@@ -164,12 +186,12 @@ The input path needs to be a wild card pointing to a set of DRAM annotation file
 **Manually Specifying the Location of CAMPER Files:** The behavior of the `camper_annotate` and `camper_distill` commands is controlled by the latest version of the CAMPER dataset. If you want to use an older version of CAMPER, it is suggested you install the older version of the CAMPER_DRAMKit tool, as they will be released together and be mutually compatible. However, if you must, you can also specify the files to use with  `camper_annotate` and `camper_distill` using the appropriate arguments. An example is shown below.
 ```
 camper_annotate -i my_genes.faa -o my_output \
-    --camper_fa_db_loc CAMPER_blast.faa \
-    --camper_fa_db_cutoffs_loc CAMPER_blast_scores.tsv \
-    --camper_hmm_loc CAMPER.hmm  \
+	--camper_fa_db_loc CAMPER_blast.faa \
+	--camper_fa_db_cutoffs_loc CAMPER_blast_scores.tsv \
+	--camper_hmm_loc CAMPER.hmm  \
    --camper_hmm_cutoffs_loc CAMPER_hmm_scores.tsv
 camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv \
-    --camper_distillate CAMPER_distillate.tsv
+	--camper_distillate CAMPER_distillate.tsv
 ```
 If at any time you forget these arguments, remember that running any script with the `--help` flag will provide more information. Also note that if you do not specify one or more arguments, the default data will be used.
 
@@ -198,7 +220,7 @@ Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dr
 
 **Distillate**: This is either a single file, or the **CAMPER** tab in the `metabolism_summary.xlsx` file. Each row in this file corresponds to a gene in a CAMPER module. This file gives you gene counts of genes in CAMPER modules. It includes the following columns:
  - `gene_id`, the database IDs assigned to this gene. These can be from CAMPER (D000XX), KEGG (KXXXX), dbCAN (AAX), or EC numbers. Note, some IDs are included more than once in the sheet if they are involved in more than one module!
-- `gene_description`, A more informative description of the gene in the step including gene abbreviation and gene name.
+- `gene_description`, A more informative description of the gene in the step, including gene abbreviation and gene name.
 - `module`, The CAMPER module that the given gene belongs to. There are 101 modules in CAMPER.
 - `header`, The classification for the polyphenol substrate following [Phenol-Explorer](http://phenol-explorer.eu/compounds/classification) Ontology. In the form: Polyphenol;Family;Sub-Family;Compound.
 - `subheader`, This contains information about routes, steps, and subunits. Sometimes, a given transformation can be accomplished in more than one sequence of steps: these are termed 'Routes'. Steps indicate the sequential transformations in the module. Subunits denote if the given gene encodes a subunit of a larger complex that carries out a step. Sometimes steps are labeled as "optional" if they are not required.
@@ -214,4 +236,3 @@ This is also provided as a PDF file.
 
 # Happy CAMPER-ing!
 Annotations, organization, and conceptualization by [Bridget McGivern](https://github.com/bmcgivern13). Coding and implementation by [Rory Flynn](https://github.com/rmFlynn).
-
