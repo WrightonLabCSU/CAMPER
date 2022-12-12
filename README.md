@@ -124,10 +124,10 @@ Once installed, CAMPER_DRAMKit will provide three commands: `camper_annotate`, `
 
 ### Standalone Workflow
 
-The simplest workflow is the two-step annotation and summarization of a single amino acid fasta file. An example of such a workflow is shown below.
+The simplest workflow is the two-step annotation and summarization of a single amino acid fasta file. An example of such a workflow is shown below. This will run CAMPER without any DRAM input at all, and the results will be argueably incompleat without the dram data. 
 
 ```
-camper_annotate -i my_genes.faa -o my_output #annotate
+camper_annotate -i my_genes.faa -o my_output #annotate, note the lack of the "-a" argument, this will not have dram data 
 camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv #summarize
 ```
 
