@@ -9,7 +9,7 @@ from datetime import datetime
 from os import path, mkdir, stat
 from typing import Callable
 from skbio.io import read as read_sequence
-from shutil import rmtree
+from shutil import rmtree, copy2
 from skbio.io import write as write_sequence
 import pandas as pd
 import numpy as np
@@ -450,9 +450,11 @@ def process_camper(output_dir, custom_fa_db_loc=(), custom_hmm_loc=(),
     custom_locs = dict()
     for name, fa_loc, hmm_loc in zip(custom_name, custom_fa_db_loc, custom_hmm_loc):
         new_fa_db_loc = path.join(output_dir, '%s.custom.mmsdb' % name)
+        new_hmm_loc = path.join(output_dir, '%s.camper.hmm' % name)
+        copy2(hmm_loc, new_hmm_loc)
         make_mmseqs_db(fa_loc, new_fa_db_loc, threads=threads, verbose=verbose)
-        run_process(['hmmpress', '-f', hmm_loc], verbose=verbose)  # all are pressed just in case
-        custom_locs[name] = {'fa': new_fa_db_loc, 'hmm': hmm_loc} 
+        run_process(['hmmpress', '-f', new_hmm_loc], verbose=verbose)  # all are pressed just in case
+        custom_locs[name] = {'fa': new_fa_db_loc, 'hmm': new_hmm_loc} 
     return custom_locs
 
 
