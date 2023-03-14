@@ -163,7 +163,7 @@ If you are not able to update your DRAM environment for whatever reason, you wil
 
 ```
 DRAM.py annotate -i 'my_bins/*.fa' -o dram_output
-camper_annotate -i my_genes.faa -a dram_output_annotation -o camper_dram_output
+camper_annotate -i my_genes.faa -a dram_output_annotation/annotations.tsv -o camper_dram_output
 ```
 
 This will create a new set of raw annotations with CAMPER data added, in this case the path of the new file will be `camper_dram_output/annotations.tsv`. Then,  use the `camper_distill` command to get a distillate with all the key genes from both DRAM and CAMPER.
