@@ -1,25 +1,3 @@
-Aim: To explain the landscape of the lab documentation, why the setup exists, what each part is for and how to work with its disparate components. 
-
-At the time of writing, the lab's documentation is split across 5 platforms, each organized to serve a goal and each ideally interlinked. The domains are:
-Air table: Used to point to more docs and provide basic docs. Specifically the server air table which lists locations on the server of software, conda environments, maintenance tools and many other things.
-Github: Tool documentation. Where we store detailed information that is related to specific lab tools and software projects. Note that projects the lab intends to make public probably have a ReadTheDocs page where most documentation should reside.
-ReadTheDocs: Professional Tool Documentation. This third party tool is free for our public repositories, and is much more powerful than the GitHub Markdown used on GitHub itself. For large public projects it is the way to go, but it can be a bit cumbersome to a layman to administer.
-The server itself: Day to day notes. Scripts should document themselves and projects should contain notes. Even if the notes are minimal in the case of one-off tasks.
-Dropbox: Catch all. Where we store documentation that is not connected to any project and not intended to move outside the lab. These documents mostly live in this folder specifically.
-These all ideally work together.  The air table links to the documentation for tools on Dropbox and GitHub. GitHub provides basic Documentation mostly for technical users, read the docs is a more professional form of the same, and Dropbox files in the gaps. 
-# more information
-If you are a regular user, then you have permission to stop reading this document here, but I hope you will continue a bit more. Good documentation needs to be input from all parts of the team, especially the less experienced among us.  If you don’t see something, right something!
-## Working with AirTable
-AirTable is more or less Excel online and with significantly better linking and lovely pre-formatted fields. 
-The air table can get very sprawling, but all the user needs to worry about is the environments, and scripts tabs. The program's tabs is largely a relic, and will probably never be added to.(Delete this once this is tab is gone)
-For each script added to the scripts table, all fields should have some input but the most important is a link to the documentation, and a few simple examples. We have learned that scripts should go into the air table when they are completely done and not before. And the documentation should be available on another platform. We expect the target audience of lab tools to be technical users but we want the software on zenith to be highly available. 
-Software should be installed in dedicated conda environments, and tested as more than one user using “sudo su name” (this often affects the availability of local software). Once Conda environments are created, they can be re-used multiple times. 
-Conda's environments should be added to the Conda Environments sheet and marked with the appropriate label (In Use and Relevant) 
-
-
-
-
-I would rather you use the command line argument in the same release.
 # BETA RELEASE
 
 The CAMPER software and data is currently in a testing state and needs more validations before it should be used for any publication or production task. This RELEASE is for early adopters to get a taste of what CAMPER can do and how it can be incorporated into a workflow. An official release will be available soon.
