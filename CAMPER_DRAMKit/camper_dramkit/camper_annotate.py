@@ -630,6 +630,14 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
         annotations.to_csv(annotation_loc, sep='\t')
         annotation_locs.append(annotation_loc)
 
+        # List files in the directory and delete those matching the pattern "*mmsdb*"
+        for file_name in os.listdir(fasta_dir):
+            if "mmsdb" in file_name:
+                file_path = os.path.join(fasta_dir, file_name)
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                    print(f"Removed: {file_name}")
+                     
     # merge
     all_annotations = pd.concat([pd.read_csv(i, sep='\t', index_col=0) for i in annotation_locs], sort=False)
     all_annotations = all_annotations.sort_values('fasta')
