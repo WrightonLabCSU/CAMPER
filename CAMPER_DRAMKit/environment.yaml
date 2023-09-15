@@ -21,7 +21,7 @@ dependencies:
   - click
   - pip
   - pip:
-    - camper_dramkit
+    - camper_dramkit==1.0.12
 
 
 
