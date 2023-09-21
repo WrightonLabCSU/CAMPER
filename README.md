@@ -1,7 +1,3 @@
-# BETA RELEASE
-
-The CAMPER software and data is currently in a testing state and needs more validations before it should be used for any publication or production task. This RELEASE is for early adopters to get a taste of what CAMPER can do and how it can be incorporated into a workflow. An official release will be available soon.
-
 # License Pending
 
 This software remains unlicensed and the Wrighton Lab reserves all rights for the time being. Contributions will be welcomed once an appropriate license or licenses can be written. This should serve as another reminder that this project is in beta.
@@ -16,10 +12,8 @@ This software remains unlicensed and the Wrighton Lab reserves all rights for th
 Table of Contents
 =================
   * [Overview](https://github.com/WrightonLabCSU/CAMPER#overview)
-  * [Installation and Usage](https://github.com/WrightonLabCSU/CAMPER#installation-and-usage)
-	* [Using CAMPER within DRAM](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram)
-	* [Standalone CAMPER](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit)
-	* [I just want your profiles to search on my own](https://github.com/WrightonLabCSU/CAMPER#3-i-just-want-to-run-your-blast-and-hmm-searches-on-my-own)
+  * [Standalone CAMPER](https://github.com/WrightonLabCSU/CAMPER#1-camper-as-a-standalone-tool)
+  * [Using CAMPER within DRAM](https://github.com/WrightonLabCSU/CAMPER#2-using-camper-with-dram)
   * [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER#camper-outputs)
   * [CAMPER Road Map](https://github.com/WrightonLabCSU/CAMPER#camper-map)
 
@@ -135,7 +129,7 @@ camper_distill  -a my_output/annotations.tsv -o my_output/distillate.tsv \
 ```
 ---
 # CAMPER Outputs
-Approaches [1](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram) and [2](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit) output two files: the raw information for given searches (`annotations.tsv`) and the summarized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER_DRAMKit).
+Whether you ran CAMPER as a [standalone tool](https://github.com/WrightonLabCSU/CAMPER#1-camper-as-a-standalone-tool) or [within DRAM](https://github.com/WrightonLabCSU/CAMPER#2-using-camper-with-dram), you will get two output files: the raw information for given searches (`annotations.tsv`) and the summarized information across searches (the distillate, either the `metabolism_summary.xlsx` if run through DRAM or the `distillate.tsv` from CAMPER).
 
 **Raw annotations**: This is either a standalone file, or columns added to a file, depending on the search approach. This file tells you the genes in your dataset that pass CAMPER annotation thresholds, what they are annotated as, and the scores. It includes the following columns:
   - `camper_hits`, A longer ID giving the CAMPER ID, gene abbreviation, and gene description.
