@@ -2,7 +2,7 @@
 
 This software remains unlicensed and the Wrighton Lab reserves all rights for the time being. Contributions will be welcomed once an appropriate license or licenses can be written. This should serve as another reminder that this project is in beta.
 
-# CAMPER (BETA)
+# CAMPER
 
 <p align="center">
 <img width="660" alt="camper_logo" src="https://user-images.githubusercontent.com/95941779/176459947-c5497a73-2b77-42f0-99ee-6a836f23d6a7.png">
@@ -156,4 +156,4 @@ This is also provided as a PDF file.
 ![CAMPER_RoadMap_v1-01](https://user-images.githubusercontent.com/95941779/171663024-4e53989c-f88b-4689-98b6-5f4df2c03b45.png)
 
 # Happy CAMPER-ing!
-Annotations, organization, and conceptualization by [Bridget McGivern](https://github.com/bmcgivern13). Coding and implementation by [Rory Flynn](https://github.com/rmFlynn).
+Annotations, organization, and conceptualization by [Bridget McGivern](https://github.com/bmcgivern13). Coding and implementation by [Rory Flynn](https://github.com/rmFlynn) and [Reed Woyda](https://github.com/BioRRW).
