@@ -1,0 +1,17 @@
+README.md
+setup.py
+camper_dramkit/__init__.py
+camper_dramkit/camper_annotate.py
+camper_dramkit/camper_distill.py
+camper_dramkit/combine_annotations_lowmem.py
+camper_dramkit.egg-info/PKG-INFO
+camper_dramkit.egg-info/SOURCES.txt
+camper_dramkit.egg-info/dependency_links.txt
+camper_dramkit.egg-info/entry_points.txt
+camper_dramkit.egg-info/requires.txt
+camper_dramkit.egg-info/top_level.txt
+camper_dramkit/data/CAMPER.hmm
+camper_dramkit/data/CAMPER_blast.faa
+camper_dramkit/data/CAMPER_blast_scores.tsv
+camper_dramkit/data/CAMPER_distillate.tsv
+camper_dramkit/data/CAMPER_hmm_scores.tsv
