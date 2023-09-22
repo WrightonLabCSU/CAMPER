@@ -50,18 +50,20 @@ The simplest way to get started with CAMPER is with Conda, using the enviroment.
 CAMPER comes with the latest version of the CAMPER annotation library preloaded, so if all you want to do is annotate and distill called genes with CAMPER, you only need the following commands.
 
 ```
-  wget https://raw.githubusercontent.com/WrightonLabCSU/CAMPER/main/CAMPER_DRAMKit/environment.yaml
-  conda env create --name CAMPER -f ./environment.yaml
-```
-You can activate the newly made environment with the command:
-```
+git clone https://github.com/WrightonLabCSU/CAMPER.git
+cd CAMPER_DRAMKit
+conda env create --name CAMPER -f ./environment.yaml
 conda activate CAMPER
+pip install dist/camper_dramkit-1.0.13.tar.gz
 ```
+
 
 #### B. Setup with pip
 If you are not able to use Conda, you can still install CAMPER_DRAMKit with pip using the command below. Note that first you will need to manually install [scikit-bio](http://scikit-bio.org/), and [MMseqs2](https://github.com/soedinglab/mmseqs2), as these tools can't be installed with the other pip dependencies.
 ```
-pip install camper_dramkit
+git clone https://github.com/WrightonLabCSU/CAMPER.git
+cd CAMPER_DRAMKit
+pip install dist/camper_dramkit-1.0.13.tar.gz
 ```
 
 ### Using CAMPER
@@ -97,8 +99,9 @@ For descriptions of the content in output files, see the [CAMPER Outputs](https:
 If you want to add CAMPER annotations to existing DRAM annotations, it may make sense to install CAMPER in the same Conda environment. This is easy to do if you have already made a DRAM Conda environment with the [instructions in the DRAM README](https://github.com/WrightonLabCSU/DRAM), then you can add CAMPER with the following commands:
 
 ```
-wget https://raw.githubusercontent.com/WrightonLabCSU/CAMPER/main/CAMPER_DRAMKit/environment.yaml
-conda env update --name DRAM -f ./environment.yaml
+git clone https://github.com/WrightonLabCSU/CAMPER.git
+cd CAMPER
+conda env update --name DRAM -f CAMPER_DRAMKit/environment.yaml
 ```
 
 Note: If you install CAMPER, you will get the latest version of the CAMPER database with it. If you want more control over the database, you can override the default data with the instructions in [Other Tools and flags](https://github.com/WrightonLabCSU/CAMPER#other-tools-and-flags).
