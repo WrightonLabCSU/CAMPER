@@ -50,7 +50,7 @@ git clone https://github.com/WrightonLabCSU/CAMPER.git
 cd CAMPER
 conda env create --name CAMPER -f CAMPER_DRAMKit/environment.yaml
 conda activate CAMPER
-pip install dist/camper_dramkit-1.0.13.tar.gz
+pip install CAMPER_DRAMKit/dist/camper_dramkit-1.0.13.tar.gz
 ```
 
 
