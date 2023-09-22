@@ -20,8 +20,7 @@ dependencies:
   - parallel=20221122
   - click
   - pip
-  - pip:
-    - camper_dramkit==1.0.12
+
 
 
 
