@@ -1,0 +1,7 @@
+pandas
+altair
+sqlalchemy
+networkx
+openpyxl
+numpy
+click

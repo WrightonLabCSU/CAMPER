@@ -1,0 +1,57 @@
+Metadata-Version: 2.1
+Name: camper-dramkit
+Version: 1.0.13
+Summary: A tool to use the CAMPER dataset
+Home-page: https://github.com/WrightonLabCSU/CAMPER
+Download-URL: https://github.com/WrightonLabCSU/CAMPER/tarball/1.0.13
+Author: Rory Flynn
+Author-email: rory.flynn@colostate.edu
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
+# BETA RELEASE
+
+The CAMPER software and data is currently in a testing state and needs more validations before it should be used for any publication or production task. This RELEASE is for early adopters to get a taste of what CAMPER can do and how it can be incorporated into a workflow. An official release will be available soon.
+
+# License Pending
+
+This software remains unlicensed and the Wrighton Lab reserves all rights for the time being. Contributions will be welcomed once an appropriate license or licenses can be written. This should serve as another reminder that this project is in beta.
+
+# CAMPER (BETA)
+
+<p align="center">
+<img width="660" alt="camper_logo" src="https://user-images.githubusercontent.com/95941779/176459947-c5497a73-2b77-42f0-99ee-6a836f23d6a7.png">
+</p>
+
+
+Table of Contents
+=================
+  * [Overview](https://github.com/WrightonLabCSU/CAMPER#overview)
+  * [Installation and Usage](https://github.com/WrightonLabCSU/CAMPER#installation-and-usage)
+	* [Using CAMPER within DRAM](https://github.com/WrightonLabCSU/CAMPER#1-using-camper-within-dram)
+	* [Standalone CAMPER](https://github.com/WrightonLabCSU/CAMPER#2-camper-standalone-tool-camper_dramkit)
+	* [I just want your profiles to search on my own](https://github.com/WrightonLabCSU/CAMPER#3-i-just-want-to-run-your-blast-and-hmm-searches-on-my-own)
+  * [CAMPER Outputs](https://github.com/WrightonLabCSU/CAMPER#camper-outputs)
+  * [CAMPER Road Map](https://github.com/WrightonLabCSU/CAMPER#camper-map)
+
+
+# Overview
+**C**urated **A**nnotations for **M**icrobial (**P**oly)phenol **E**nzymes and **R**eactions (**CAMPER**) is a tool that annotates genes likely involved in transforming polyphenols, and provides chemical context for these transformations in a summarized form. CAMPER aims to address a blind spot in microbial metabolism. It is currently challenging to infer polyphenol metabolism from genomic data because:
+1) Genes encoding characterized enzymes have not been propagated into annotation databases
+3) Genes in databases can often be involved in multiple pathways, requiring expert knowledge to get polyphenol context
+4) Polyphenols can be transformed in many ways – oxidized, reduced, demethylated, deglycosylated, etc.
+5) Polyphenols are a complex class of compounds
+
+These challenges limit widespread understanding of the transformation of these compounds across environments.
+
+To facilitate the inference of polyphenol metabolism from genomes, CAMPER includes 8 Hidden-Markov Model (HMM) profiles and 33 Basic Local Alignment Search Tool (BLAST) searches for (poly)phenol-active genes. We also provide recommended score cut-offs for searches using two ranks: a more stringent, trusted rank (A) and a more relaxed, exploratory rank (B). The development of these profiles will be described in McGivern et al (in prep). Beyond these 41 profiles, nearly 300 other annotations from other databases (KEGG, dbCAN) are included in the CAMPER summarization.
+
+CAMPER summarizes the gene annotations into 101 modules representing different polyphenol transformations. These modules are classified by the family and sub-family of polyphenols used as substrates (following [Phenol-Explorer](http://phenol-explorer.eu/compounds/classification) Ontology) and by the oxygen requirements for the genes involved. These modules can be as small as a single gene, up to a maximum of 12 genes in the largest module.
+![camper_pathways_tree_for_github-01](https://user-images.githubusercontent.com/95941779/171468538-3f2cc169-2170-4612-880b-22ad11d7c9e9.png)
+**Figure 1. CAMPER consists of 101 polyphenol transformation modules, organized by substrates (Family and Subfamily) and oxygen requirements. Modules can be composed of 1-12 reaction steps.**
+
+For more detailed information on the organization, outputs and how to run CAMPER, see the [CAMPER GitHub](https://github.com/WrightonLabCSU/CAMPER.git)
+
+
+# Happy CAMPER-ing!
+Annotations, organization, and conceptualization by [Bridget McGivern](https://github.com/bmcgivern13). Coding and implementation by [Rory Flynn](https://github.com/rmFlynn).

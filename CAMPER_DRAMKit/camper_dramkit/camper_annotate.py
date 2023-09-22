@@ -9,7 +9,7 @@ from datetime import datetime
 from os import path, mkdir, stat
 from typing import Callable
 from skbio.io import read as read_sequence
-from shutil import rmtree, copy2
+from shutil import rmtree
 from skbio.io import write as write_sequence
 import pandas as pd
 import numpy as np
@@ -450,11 +450,9 @@ def process_camper(output_dir, custom_fa_db_loc=(), custom_hmm_loc=(),
     custom_locs = dict()
     for name, fa_loc, hmm_loc in zip(custom_name, custom_fa_db_loc, custom_hmm_loc):
         new_fa_db_loc = path.join(output_dir, '%s.custom.mmsdb' % name)
-        new_hmm_loc = path.join(output_dir, '%s.camper.hmm' % name)
-        copy2(hmm_loc, new_hmm_loc)
         make_mmseqs_db(fa_loc, new_fa_db_loc, threads=threads, verbose=verbose)
-        run_process(['hmmpress', '-f', new_hmm_loc], verbose=verbose)  # all are pressed just in case
-        custom_locs[name] = {'fa': new_fa_db_loc, 'hmm': new_hmm_loc} 
+        run_process(['hmmpress', '-f', hmm_loc], verbose=verbose)  # all are pressed just in case
+        custom_locs[name] = {'fa': new_fa_db_loc, 'hmm': hmm_loc} 
     return custom_locs
 
 
@@ -612,6 +610,7 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
         fasta_dir = path.join(tmp_dir, fasta_name)
         mkdir(fasta_dir)
 
+
         # annotate
         annotations = pd.concat([
             orf for orf in
@@ -629,15 +628,14 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
         annotation_loc = path.join(fasta_dir, 'annotations.tsv')
         annotations.to_csv(annotation_loc, sep='\t')
         annotation_locs.append(annotation_loc)
-
+        
         # List files in the directory and delete those matching the pattern "*mmsdb*"
         for file_name in os.listdir(fasta_dir):
             if "mmsdb" in file_name:
                 file_path = os.path.join(fasta_dir, file_name)
                 if os.path.isfile(file_path):
                     os.remove(file_path)
-                    print(f"Removed: {file_name}")
-                     
+
     # merge
     all_annotations = pd.concat([pd.read_csv(i, sep='\t', index_col=0) for i in annotation_locs], sort=False)
     all_annotations = all_annotations.sort_values('fasta')
@@ -648,6 +646,7 @@ def annotate_genes(input_faa, output_dir='.', bit_score_threshold=60, rbh_bit_sc
     all_annotations.to_csv(path.join(output_dir, 'annotations.tsv'), sep='\t')
     if len(faa_locs) > 0:
         merge_files(faa_locs, path.join(output_dir, 'genes.faa'))
+
 
     # clean up
     if not keep_tmp_dir:
