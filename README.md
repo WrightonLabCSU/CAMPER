@@ -51,8 +51,8 @@ CAMPER comes with the latest version of the CAMPER annotation library preloaded,
 
 ```
 git clone https://github.com/WrightonLabCSU/CAMPER.git
-cd CAMPER_DRAMKit
-conda env create --name CAMPER -f ./environment.yaml
+cd CAMPER
+conda env create --name CAMPER -f CAMPER_DRAMKit/environment.yaml
 conda activate CAMPER
 pip install dist/camper_dramkit-1.0.13.tar.gz
 ```
@@ -62,8 +62,8 @@ pip install dist/camper_dramkit-1.0.13.tar.gz
 If you are not able to use Conda, you can still install CAMPER_DRAMKit with pip using the command below. Note that first you will need to manually install [scikit-bio](http://scikit-bio.org/), and [MMseqs2](https://github.com/soedinglab/mmseqs2), as these tools can't be installed with the other pip dependencies.
 ```
 git clone https://github.com/WrightonLabCSU/CAMPER.git
-cd CAMPER_DRAMKit
-pip install dist/camper_dramkit-1.0.13.tar.gz
+cd CAMPER
+pip install CAMPER_DRAMKit/dist/camper_dramkit-1.0.13.tar.gz
 ```
 
 ### Using CAMPER
