@@ -1,7 +1,3 @@
-# License Pending
-
-This software remains unlicensed and the Wrighton Lab reserves all rights for the time being. Contributions will be welcomed once an appropriate license or licenses can be written. This should serve as another reminder that this project is in beta.
-
 # CAMPER
 
 <p align="center">
