@@ -1,5 +1,3 @@
-## See the CAMPER preprint on [biorxiv](https://www.biorxiv.org/content/10.1101/2023.09.24.559193v1)!
-
 # CAMPER
 
 <p align="center">
