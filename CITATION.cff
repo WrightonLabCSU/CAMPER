@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "McGivern"
+  given-names: "Bridget"
+- family-names: "Reed"
+  given-names: "Woyda"
+- family-names: "Rory"
+  given-names: "Flynn"
+- family-names: "Kelly"
+  given-names: "Wrighton"
+title: "CAMPER"
+version: 1.0.0
+doi: 10.5281/zenodo.10835273
+date-released: 2024-03-18
+url: "https://github.com/github-linguist/linguist"
